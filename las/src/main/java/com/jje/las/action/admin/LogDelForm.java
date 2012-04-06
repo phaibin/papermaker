@@ -6,22 +6,20 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class LogDelForm {
 
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date dt;
     private String level;
     private String module;
 
-    
-  
     public Date getDt() {
-		return dt;
-	}
+        return dt;
+    }
 
-	public void setDt(Date dt) {
-		this.dt = dt;
-	}
+    public void setDt(Date dt) {
+        this.dt = dt;
+    }
 
-	public String getLevel() {
+    public String getLevel() {
         return level;
     }
 
@@ -36,5 +34,5 @@ public class LogDelForm {
     public void setModule(String module) {
         this.module = module;
     }
-    
+
 }

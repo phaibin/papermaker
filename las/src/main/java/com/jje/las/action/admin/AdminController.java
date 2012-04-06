@@ -28,31 +28,28 @@ public class AdminController {
 
     @Autowired
     LogScanner scanner;
-    
-    
+
     @Autowired
     LasLogService ls;
-    
-    
-    @InitBinder  
-    protected void initBinder(HttpServletRequest request,  
-            ServletRequestDataBinder binder)  {  
-           binder.registerCustomEditor(Date.class,new DateTimeEditor());     
-    } 
 
-    @RequestMapping(method = RequestMethod.GET, value = {"/", "/index"})
+    @InitBinder
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
+        binder.registerCustomEditor(Date.class, new DateTimeEditor());
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = { "/", "/index" })
     public String index(Model model) {
         model.addAttribute("logs", ms.list());
         return "admin/index";
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = {"/create"})
+    @RequestMapping(method = RequestMethod.GET, value = { "/create" })
     public String create(Model model) {
         model.addAttribute("monitLog", new MonitFile());
         return "admin/create";
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = {"/create"})
+    @RequestMapping(method = RequestMethod.POST, value = { "/create" })
     public String save(MonitFile log, Model model) {
         ms.save(log);
         model.addAttribute("logs", ms.list());
@@ -67,24 +64,23 @@ public class AdminController {
         return "admin/index";
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = {"/start"})
+    @RequestMapping(method = RequestMethod.GET, value = { "/start" })
     public String start(Model model) {
         model.addAttribute("logs", ms.list());
         scanner.perform();
         return "admin/index";
     }
-    
-    @RequestMapping(method = RequestMethod.GET, value = {"/deletelog"})
+
+    @RequestMapping(method = RequestMethod.GET, value = { "/deletelog" })
     public String goDelete(Model model) {
-    	 model.addAttribute("logDelForm", new LogDelForm());
+        model.addAttribute("logDelForm", new LogDelForm());
         return "admin/deletelog";
     }
-    
-    
-    @RequestMapping(method = RequestMethod.POST, value = {"/deletelog"})
-    public String goDelete(LogDelForm logDelForm,Model model) {
-    	ls.delete(logDelForm);
-    	model.addAttribute("logs", ms.list());
+
+    @RequestMapping(method = RequestMethod.POST, value = { "/deletelog" })
+    public String goDelete(LogDelForm logDelForm, Model model) {
+        ls.delete(logDelForm);
+        model.addAttribute("logs", ms.list());
         return "admin/index";
     }
 

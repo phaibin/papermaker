@@ -1,7 +1,5 @@
 package com.jje.las.action.admin;
 
-import com.mongodb.BasicDBObject;
-
 public class MonitFile {
 
     private String id;

@@ -4,7 +4,6 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-
 public class LogQueryForm {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -13,9 +12,8 @@ public class LogQueryForm {
     private Date end;
     private String priority;
     private String logFrom;
-   
 
-	private int page = 1;
+    private int page = 1;
     private int pageSize = 50;
 
     public int getPageSize() {
@@ -51,18 +49,19 @@ public class LogQueryForm {
     }
 
     public String getPriority() {
-        return this.priority ;
+        return this.priority;
     }
 
     public void setPriority(String priority) {
         this.priority = priority;
     }
-    public String getLogFrom() {
-		return logFrom;
-	}
 
-	public void setLogFrom(String logFrom) {
-		this.logFrom = logFrom;
-	}
-   
+    public String getLogFrom() {
+        return logFrom;
+    }
+
+    public void setLogFrom(String logFrom) {
+        this.logFrom = logFrom;
+    }
+
 }

@@ -8,7 +8,6 @@ public class LogQueryResult {
     private int totalPage;
     private int currentPage;
 
-
     public List<Log> getList() {
         return list;
     }
@@ -36,13 +35,12 @@ public class LogQueryResult {
     public static LogQueryResult getResult(List<Log> list, long dataCount, int currentPage, int pageSize) {
         LogQueryResult r = new LogQueryResult();
         r.setList(list);
-      
-       int pz =Long.valueOf(dataCount).intValue() / pageSize;
-       int mod =Long.valueOf(dataCount).intValue()%pageSize;
-       if(mod>0)
-       {
-    	   pz++;
-       }
+
+        int pz = Long.valueOf(dataCount).intValue() / pageSize;
+        int mod = Long.valueOf(dataCount).intValue() % pageSize;
+        if (mod > 0) {
+            pz++;
+        }
         r.setTotalPage(pz);
         r.setCurrentPage(currentPage);
         return r;

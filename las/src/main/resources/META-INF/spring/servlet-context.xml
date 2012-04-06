@@ -41,6 +41,8 @@
     <mvc:annotation-driven />	 
     <mvc:default-servlet-handler     />
 
+    <bean id="mongoHandler" class="com.jje.las.handler.MongoHandler" init-method="init" destroy-method="destory"/>
+    
     <bean
         class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/views/" />

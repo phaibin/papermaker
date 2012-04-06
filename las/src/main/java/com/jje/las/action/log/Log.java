@@ -2,9 +2,6 @@ package com.jje.las.action.log;
 
 import java.util.Date;
 
-
-import com.mongodb.BasicDBObject;
-
 public class Log {
 
     private String id;
@@ -26,19 +23,15 @@ public class Log {
         this.logFrom = logFrom;
     }
 
-    public Log()
-    {
-    	
+    public Log() {
     }
 
-    public Log(Date d,String priority,String className)
-    {
-    	setLogTime(d);
-    	setPriority(priority);
-    	setClassName(className);
+    public Log(Date d, String priority, String className) {
+        setLogTime(d);
+        setPriority(priority);
+        setClassName(className);
     }
-    
-    
+
     public String getClassName() {
         return className;
     }
@@ -110,14 +103,13 @@ public class Log {
     public void setThread(String thread) {
         this.thread = thread;
     }
-    
-    
+
     public void appendDetail(String line) {
-        if(detail == null) detail = "";
+        if (detail == null)
+            detail = "";
         StringBuffer buf = new StringBuffer(detail);
         buf.append(line);
         setDetail(buf.toString());
     }
-    
-    
+
 }

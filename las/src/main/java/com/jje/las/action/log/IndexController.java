@@ -21,31 +21,25 @@ public class IndexController {
 
     @Autowired
     LasLogService l;
-    
-    
-    
-    @InitBinder  
-    protected void initBinder(HttpServletRequest request,  
-            ServletRequestDataBinder binder)  {  
-           binder.registerCustomEditor(Date.class,new DateTimeEditor());     
-    } 
-    
-    
-    
-    
-    @RequestMapping(value = {"", "/index"})
-    public String index(LogQueryForm form, Model model){
+
+    @InitBinder
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
+        binder.registerCustomEditor(Date.class, new DateTimeEditor());
+    }
+
+    @RequestMapping(value = { "", "/index" })
+    public String index(LogQueryForm form, Model model) {
         form.setPriority("ERROR");
-    	LogQueryResult r = l.query(form);
-    	model.addAttribute("logs", r.getList());
+        LogQueryResult r = l.query(form);
+        model.addAttribute("logs", r.getList());
         model.addAttribute("totalPage", r.getTotalPage());
         return "/log/index";
     }
 
     @RequestMapping(value = "/query")
-    public String query(LogQueryForm form, Model model){
-    	LogQueryResult r = l.query(form);
-    	model.addAttribute("logs", r.getList());
+    public String query(LogQueryForm form, Model model) {
+        LogQueryResult r = l.query(form);
+        model.addAttribute("logs", r.getList());
         model.addAttribute("totalPage", r.getTotalPage());
         return "/log/index";
     }
@@ -57,10 +51,10 @@ public class IndexController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/associate/{id}")
-    public String associateLog(@PathVariable String id, Model model){
+    public String associateLog(@PathVariable String id, Model model) {
         Log log = l.get(id);
         model.addAttribute("logs", l.associateQuery(log));
         return "/log/associatelog";
     }
-    
+
 }

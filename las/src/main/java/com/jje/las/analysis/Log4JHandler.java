@@ -1,15 +1,21 @@
 package com.jje.las.analysis;
 
-import com.jje.las.action.admin.MonitFile;
-import com.jje.las.action.log.Log;
-import com.jje.las.service.ErrorLogService;
-import com.jje.las.service.LasLogService;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.jje.las.action.admin.MonitFile;
+import com.jje.las.action.log.Log;
+import com.jje.las.service.LasLogService;
 
 @Component
 public class Log4JHandler implements IHandleLogFile {
@@ -52,7 +58,7 @@ public class Log4JHandler implements IHandleLogFile {
                 last = l;
             }
         }
-        if(last != null){
+        if (last != null) {
             last.setLogFrom(from);
             handle.insert(last);
         }
@@ -60,7 +66,9 @@ public class Log4JHandler implements IHandleLogFile {
         isr.close();
     }
 
-    //2012-02-09 14:31:43,288 INFO [com.jje.autorental.order.esb.OrderDispatchResource] - 执行同步子订单调度信息, resource url :/autorental/order/syncOrderDispatch
+    // 2012-02-09 14:31:43,288 INFO
+    // [com.jje.autorental.order.esb.OrderDispatchResource] - 执行同步子订单调度信息,
+    // resource url :/autorental/order/syncOrderDispatch
     private Log parseLine(String line, Log last) throws IOException {
         String regex = "(\\d{4}-\\d{2}-\\d{2}) (\\d{2}:\\d{2}:\\d{2},\\d{3}) ([^ ]*) \\[(.*)\\] - (.*)$";
         Pattern p = Pattern.compile(regex);
@@ -78,8 +86,8 @@ public class Log4JHandler implements IHandleLogFile {
             l.setMessage(m.group(5));
             return l;
         } else {
-            if(last != null){
-                last.appendDetail(line+"\n");
+            if (last != null) {
+                last.appendDetail(line + "\n");
             }
             return last;
         }

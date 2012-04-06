@@ -1,6 +1,8 @@
 package com.jje.las.service;
 
 import com.jje.las.action.admin.MonitFile;
+import com.jje.las.config.LasConfiguration;
+import com.jje.las.handler.MongoHandler;
 import com.jje.las.util.Convert;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -8,17 +10,19 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MonitLogService {
 
-    private static Logger logger = Logger.getLogger(MonitLogService.class.getName());
-    
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    LasConfiguration conf;
     @Autowired
     MongoHandler handler;
 
@@ -27,15 +31,13 @@ public class MonitLogService {
         DBCursor cursor = getMonitorCollection().find();
         while (cursor.hasNext()) {
             BasicDBObject b = (BasicDBObject) cursor.next();
-            
-            MonitFile file =null;
-            try
-            {
-               file =(MonitFile)Convert.parseObject(b, MonitFile.class);
-               list.add(file);
-            }catch(Exception ex)
-            {
-            	logger.log(Level.FINE, ex.getMessage());
+
+            MonitFile file = null;
+            try {
+                file = (MonitFile) Convert.parseObject(b, MonitFile.class);
+                list.add(file);
+            } catch (Exception ex) {
+                logger.error("error in list monit file.", ex);
             }
         }
         return list;
@@ -52,8 +54,8 @@ public class MonitLogService {
     }
 
     private DBCollection getMonitorCollection() {
-        DB db = handler.getConnection().getDB("LogDB");
-        DBCollection conn = db.getCollection("jje_log_monit");
+        DB db = handler.getConnection().getDB(conf.getSchema());
+        DBCollection conn = db.getCollection(conf.getConfigTable());
         return conn;
     }
 }
