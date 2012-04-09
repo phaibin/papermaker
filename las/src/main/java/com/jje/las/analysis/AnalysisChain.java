@@ -28,6 +28,10 @@ public class AnalysisChain implements Chain {
         if (context == null) {
             throw new IllegalArgumentException("Can't execute a null context");
         }
+        
+        if(!LasContext.class.isInstance(context)){
+            throw new IllegalArgumentException("context must be LasContext");
+        }
 
         boolean isSuccess = false;
         for(Command cmd : commands){

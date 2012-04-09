@@ -1,13 +1,11 @@
 package com.jje.las.analysis;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
-import org.apache.commons.chain.Context;
-import org.apache.commons.chain.impl.ContextBase;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.LineIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,57 +14,49 @@ import com.jje.las.action.log.Log;
 import com.jje.las.service.LasLogService;
 
 @Component
-public class Log4JHandler implements IHandleLogFile {
+public class Log4JHandler {
 
     private LasLogService handle;
+    
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     AnalysisChain analysisChain = new AnalysisChain();
-    
+
     @Autowired
     public void setHandle(LasLogService handle) {
         this.handle = handle;
     }
 
     public void handleLogFile(MonitFile mfile) throws Exception {
-        String fileAddress = mfile.getPath();
-        File file = new File(fileAddress);
-        if (!file.exists()) {
-            return;
-        }
-        FileInputStream is = new FileInputStream(file);
+        File file = mfile.getRealFile();
         try {
-            parser(is, mfile.getFileName());
+            parser(file, mfile.getFileName());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error("Parse error."+file, ex);
         }
-        is.close();
         file.delete();
     }
 
-    @SuppressWarnings("unchecked")
-    protected void parser(InputStream is, String from) throws Exception {
-        InputStreamReader isr = new InputStreamReader(is, "UTF-8");
-        BufferedReader br = new BufferedReader(isr);
-        String line;
+    protected void parser(File file, String from) throws Exception {
         Log last = null;
-        Context context = new ContextBase();
-        while ((line = br.readLine()) != null) {
-            context.put("currentLine", line);
-            context.put("lastLog", last);
-            context.put("fileFrom", from);
-            boolean success = analysisChain.execute(context);
-            if(!success){
-                continue;
+        LasContext context = new LasContext();
+        LineIterator it = FileUtils.lineIterator(file, "UTF-8");
+        try {
+            while (it.hasNext()) {
+                context.setCurrentLine(it.nextLine()).setLastLog(last).setFileFrom(from);
+                if (!analysisChain.execute(context)) {
+                    continue;
+                }
+                Log newLog = context.getNewLog();
+                if (newLog != null) {
+                    handle.insert(last);
+                    last = newLog;
+                }
             }
-            Log newLog = (Log)context.get("newLog");
-            if(newLog != null){
-                handle.insert(last);
-                last = newLog;
-            }
+            handle.insert(last);
+        } finally {
+            it.close();
         }
-        handle.insert(last);
-        br.close();
-        isr.close();
     }
 
 }

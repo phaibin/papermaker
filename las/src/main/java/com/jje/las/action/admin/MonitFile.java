@@ -1,5 +1,7 @@
 package com.jje.las.action.admin;
 
+import java.io.File;
+
 public class MonitFile {
 
     private String id;
@@ -47,5 +49,13 @@ public class MonitFile {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+    
+    public File getRealFile(){
+        File file = new File(getPath());
+        if (!file.exists()) {
+            throw new RuntimeException("File doesn't exists."+file);
+        }
+        return file;
     }
 }

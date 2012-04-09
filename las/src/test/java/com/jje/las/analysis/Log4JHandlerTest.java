@@ -6,14 +6,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import java.io.File;
-import java.io.FileInputStream;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.ResourceUtils;
 
 import com.jje.las.LasBaseSpringTest;
@@ -31,9 +27,7 @@ public class Log4JHandlerTest extends LasBaseSpringTest{
         LasLogService mockHandler = mock(LasLogService.class);
         ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
         handler.setHandle(mockHandler);
-        FileInputStream fis = new FileInputStream(file);
-        handler.parser(fis, "hbp.log");
-        fis.close();
+        handler.parser(file, "hbp.log");
         //actual 33, but insert null first, so 34 times
         verify(mockHandler, atLeast(34)).insert(argument.capture());
         verify(mockHandler, atMost(34)).insert(argument.capture());
@@ -45,9 +39,7 @@ public class Log4JHandlerTest extends LasBaseSpringTest{
         LasLogService mockHandler = mock(LasLogService.class);
         ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
         handler.setHandle(mockHandler);
-        FileInputStream fis = new FileInputStream(file);
-        handler.parser(fis, "hbp.log");
-        fis.close();
+        handler.parser(file, "hbp.log");
         verify(mockHandler, atLeast(6)).insert(argument.capture());
         verify(mockHandler, atMost(6)).insert(argument.capture());
     }
@@ -60,9 +52,7 @@ public class Log4JHandlerTest extends LasBaseSpringTest{
         LasLogService mockHandler = mock(LasLogService.class);
         ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
         handler.setHandle(mockHandler);
-        FileInputStream fis = new FileInputStream(file);
-        handler.parser(fis, "hbp.log");
-        fis.close();
+        handler.parser(file, "hbp.log");
         verify(mockHandler, atLeast(4)).insert(argument.capture());
         verify(mockHandler, atMost(4)).insert(argument.capture());
     }

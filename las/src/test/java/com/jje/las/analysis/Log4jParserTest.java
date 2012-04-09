@@ -1,13 +1,10 @@
 package com.jje.las.analysis;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.chain.Context;
-import org.apache.commons.chain.impl.ContextBase;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -52,9 +49,8 @@ public class Log4jParserTest {
         String samples = "2012-02-09 14:31:43,288 INFO [com.jje.autorental.order.esb.OrderDispatchResource] - 执行同步子订单调度信息, resource url :/autorental/order/syncOrderDispatch";
         Log4JCommand cmd = new Log4JCommand();
         Log nl = new Log();
-        Context ctx = new ContextBase();
-        ctx.put("currentLine", samples);
-        ctx.put("newLog", nl);
+        LasContext ctx = new LasContext();
+        ctx.setCurrentLine(samples).setNewLog(nl);
         Assert.assertTrue(cmd.execute(ctx));
         SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = simpleFormat.parse("2012-02-09 14:31:43,288");

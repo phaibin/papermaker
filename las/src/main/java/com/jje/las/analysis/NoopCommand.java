@@ -7,11 +7,12 @@ import com.jje.las.action.log.Log;
 
 public class NoopCommand implements Command {
 
-    public boolean execute(Context context) throws Exception {
+    public boolean execute(Context ctx) throws Exception {
         boolean isComplete = false;
-        context.remove("newLog");
-        Log last = (Log)context.get("lastLog");
-        String line = context.get("currentLine").toString();
+        LasContext context = (LasContext)ctx;
+        context.removeNewLog();
+        Log last = context.getLastLog();
+        String line = context.getCurrentLine();
         if(last != null ){
             last.appendDetail(line);
             isComplete = true;

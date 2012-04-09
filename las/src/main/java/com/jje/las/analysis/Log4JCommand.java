@@ -24,9 +24,10 @@ public class Log4JCommand implements Command {
 
     public boolean execute(Context ctx) throws Exception {
         boolean isComplete = false;
-        String line = (String)ctx.get("currentLine");
-        String fileFrom = (String)ctx.get("fileFrom");
-        Log newLog = (Log)ctx.get("newLog");
+        LasContext context = (LasContext)ctx;
+        String line = context.getCurrentLine();
+        String fileFrom = context.getFileFrom();
+        Log newLog = context.getNewLog();
         newLog.setLogFrom(fileFrom);
         Matcher m = pattern.matcher(line);
         if (m.matches() && m.groupCount() == 5) {

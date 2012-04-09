@@ -11,9 +11,8 @@ public class CreateLogCommand implements Command {
     public boolean execute(Context context) throws Exception {
         boolean isComplete =false;
         
-        String fileFrom = (String)context.get("fileFrom");
         Log l = new Log();
-        l.setLogFrom(fileFrom);
+        l.setLogFrom(((LasContext)context).getFileFrom());
         context.put("newLog", l);
 
         return isComplete;

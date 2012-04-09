@@ -16,7 +16,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.jje.las.action.admin.MonitFile;
-import com.jje.las.analysis.IHandleLogFile;
 import com.jje.las.analysis.Log4JHandler;
 import com.jje.las.service.MonitLogService;
 
@@ -39,10 +38,9 @@ public class LogScanner {
                 List<MonitFile> list = handler.list();
                 logger.debug("list:" + list);
                 for (MonitFile log : convertList(list)) {
-                    IHandleLogFile fileHandle = log4jHandle;
-                    logger.debug("perform log file name:" + log.getPath());
+                    logger.info("perform log file name:" + log.getPath());
                     try {
-                        fileHandle.handleLogFile(log);
+                        log4jHandle.handleLogFile(log);
                     } catch (Exception e) {
                         logger.error("error in parse file " + log.getFileName(), e);
                     }
