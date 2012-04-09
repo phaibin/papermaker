@@ -19,7 +19,7 @@ import com.jje.las.service.LasLogService;
 public class FileParserHandler {
 
     private LasLogService handle;
-    
+
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -31,13 +31,8 @@ public class FileParserHandler {
     }
 
     public void handleLogFile(MonitFile mfile) throws Exception {
-        File file = mfile.getRealFile();
-        try {
-            parser(file, mfile.getFileName());
-        } catch (Exception ex) {
-            logger.error("Parse error."+file, ex);
-        }
-        file.delete();
+        parser(mfile.getRealFile(), mfile.getFileName());
+        mfile.getRealFile().delete();
     }
 
     protected void parser(File file, String from) throws Exception {
