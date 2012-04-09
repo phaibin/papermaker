@@ -71,13 +71,14 @@
             <input type="submit" value="查询" onclick="return doSubmit()"/>
         </form:form>
         <table  border=1 cellspacing=0   width=100% bordercolorlight=#333333 bordercolordark=#efefef top=100px>
-            <th>时间</th><th>日志级别</th><th>系统</th><th>分类</th><th>信息</th><th colspan="2">操作</th>
+            <th>时间</th><th>日志级别</th><th>系统</th><th>来源</th><th>分类</th><th>信息</th><th colspan="2">操作</th>
             <c:forEach var="logItem" items="${logs}" varStatus="status">
                 <tr>
                     <td style="width: 180px"><fmt:formatDate value="${logItem.logTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
-                    <td style="width: 180px">${logItem.priority}</td>
-                    <td style="width: 180px">${logItem.logFrom}</td>
-                    <td style="width: 180px">${logItem.className}</td>
+                    <td style="width: 100px">${logItem.priority}</td>
+                    <td style="width: 100px">${logItem.module}</td>
+                    <td style="width: 150px">${logItem.logFrom}</td>
+                    <td style="width: 230px">${logItem.className}</td>
                     <td >${logItem.message}</td>
                     <td style="width:90px;"><a href="<c:url value="/log/${logItem.id}"/>">查看详情</a></td>
                     <td style="width:130px;"><a href="<c:url value="/associate/${logItem.id}"/>">时间关联日志</a></td>

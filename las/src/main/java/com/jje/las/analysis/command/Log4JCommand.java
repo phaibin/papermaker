@@ -23,8 +23,14 @@ public class Log4JCommand extends AbstractLasCommand{
     @Override
     public boolean perform(LasContext context) throws Exception {
         boolean isComplete = false;
-        String line = context.getCurrentLine();
         Log newLog = context.getNewLog();
+        String line = context.getCurrentLine();
+        String from = context.getFileFrom();
+        int idx = from.indexOf(".log");
+        if(idx != -1){
+            String module = from.substring(0, idx);
+            newLog.setModule(module);
+        }
         Matcher m = pattern.matcher(line);
         if (m.matches() && m.groupCount() == 5) {
             newLog.setLogTime(simpleFormat.parse(m.group(1) + " " + m.group(2)));

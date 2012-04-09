@@ -10,7 +10,7 @@ public class CreateLogCommand extends AbstractLasCommand {
         boolean isComplete =false;
         
         Log l = new Log();
-        l.setLogFrom(((LasContext)context).getFileFrom());
+        l.setLogFrom(context.getFileFrom());
         context.put("newLog", l);
 
         return isComplete;
