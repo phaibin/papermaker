@@ -19,7 +19,7 @@ import com.jje.las.service.LasLogService;
 public class Log4JHandlerTest extends LasBaseSpringTest{
         
     @Autowired
-    Log4JHandler handler;
+    FileParserHandler handler;
     
     @Test
     public void parseSimple() throws Exception{

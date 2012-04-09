@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-       xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xmlns:tx="http://www.springframework.org/schema/tx" 
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:task="http://www.springframework.org/schema/task"
-       xsi:schemaLocation="
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
 		http://www.springframework.org/schema/mvc 
 		http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
 		http://www.springframework.org/schema/beans 
@@ -21,32 +18,39 @@
                 http://www.springframework.org/schema/task/spring-task-3.0.xsd
                 ">
 
-    <!-- Default bean name is 'mongo' 
-    <mongo:mongo host="localhost" port="27017" />
- 
-    <bean id="mongoTemplate" 
-              class="org.springframework.data.document.mongodb.MongoTemplate">
-        <constructor-arg ref="mongo" />
-        <constructor-arg name="databaseName" value="yourdb" />
-        <constructor-arg name="defaultCollectionName" value="yourCollection" />
-    </bean>
-    -->
-    <context:property-placeholder location="file:${las_home}/etc/config.properties"/>
+	<!-- Default bean name is 'mongo' <mongo:mongo host="localhost" port="27017" 
+		/> <bean id="mongoTemplate" class="org.springframework.data.document.mongodb.MongoTemplate"> 
+		<constructor-arg ref="mongo" /> <constructor-arg name="databaseName" value="yourdb" 
+		/> <constructor-arg name="defaultCollectionName" value="yourCollection" /> 
+		</bean> -->
+	<context:property-placeholder location="file:${las_home}/etc/config.properties" />
 
-    <task:annotation-driven executor="myExecutor" scheduler="myScheduler"/>
-    <task:executor id="myExecutor" pool-size="5"/>
-    <task:scheduler id="myScheduler" pool-size="10"/>
+	<task:annotation-driven executor="myExecutor"
+		scheduler="myScheduler" />
+	<task:executor id="myExecutor" pool-size="5" />
+	<task:scheduler id="myScheduler" pool-size="10" />
 
-    <context:component-scan base-package="com.jje.las" />
-    <mvc:annotation-driven />	 
-    <mvc:default-servlet-handler     />
+	<context:component-scan base-package="com.jje.las" />
+	<mvc:annotation-driven />
+	<mvc:default-servlet-handler />
 
-    <bean id="mongoHandler" class="com.jje.las.handler.MongoHandler" init-method="init" destroy-method="destory"/>
-    
-    <bean
-        class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/views/" />
-        <property name="suffix" value=".jsp" />
-    </bean>
-   
+	<bean id="mongoHandler" class="com.jje.las.handler.MongoHandler"
+		init-method="init" destroy-method="destory" />
+
+	<bean id="analysisChain" class="com.jje.las.analysis.command.AnalysisChain">
+		<property name="commands">
+			<list>
+				<bean id="createNewLog" class="com.jje.las.analysis.command.CreateLogCommand"></bean>
+				<bean id="log4JCommand" class="com.jje.las.analysis.command.Log4JCommand"></bean>
+				<bean id="noopCommand" class="com.jje.las.analysis.command.NoopCommand"></bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
 </beans>

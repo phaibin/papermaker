@@ -1,4 +1,4 @@
-package com.jje.las.analysis;
+package com.jje.las.analysis.command;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,16 +7,22 @@ import org.apache.commons.chain.Chain;
 import org.apache.commons.chain.Command;
 import org.apache.commons.chain.Context;
 
+
 public class AnalysisChain implements Chain {
 
-    private final List<Command> commands = new ArrayList<Command>();
+    private List<Command> commands = new ArrayList<Command>();
     
     public AnalysisChain(){
-        addCommand(new CreateLogCommand());
-        addCommand(new Log4JCommand());
-        addCommand(new NoopCommand());
     }
     
+    public List<Command> getCommands() {
+        return commands;
+    }
+
+    public void setCommands(List<Command> commands) {
+        this.commands = commands;
+    }
+
     public void addCommand(Command command) {
         if (command == null) {
             throw new IllegalArgumentException();

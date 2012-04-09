@@ -9,6 +9,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.jje.las.action.log.Log;
+import com.jje.las.analysis.command.LasContext;
+import com.jje.las.analysis.command.Log4JCommand;
 
 public class Log4jParserTest {
 

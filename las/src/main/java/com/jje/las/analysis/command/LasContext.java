@@ -1,4 +1,4 @@
-package com.jje.las.analysis;
+package com.jje.las.analysis.command;
 
 import java.util.HashMap;
 

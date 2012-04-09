@@ -16,7 +16,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.jje.las.action.admin.MonitFile;
-import com.jje.las.analysis.Log4JHandler;
+import com.jje.las.analysis.FileParserHandler;
 import com.jje.las.service.MonitLogService;
 
 @Component
@@ -27,7 +27,7 @@ public class LogScanner {
     @Autowired
     MonitLogService handler;
     @Autowired
-    Log4JHandler log4jHandle;
+    FileParserHandler parser;
 
     @Async
     @Scheduled(fixedRate = 5 * 60 * 1000)
@@ -35,20 +35,18 @@ public class LogScanner {
         if (lock.tryLock()) {
             logger.debug("start scanner");
             try {
-                List<MonitFile> list = handler.list();
-                logger.debug("list:" + list);
-                for (MonitFile log : convertList(list)) {
+                for (MonitFile log : convertList(handler.list())) {
                     logger.info("perform log file name:" + log.getPath());
                     try {
-                        log4jHandle.handleLogFile(log);
+                        parser.handleLogFile(log);
                     } catch (Exception e) {
                         logger.error("error in parse file " + log.getFileName(), e);
                     }
                 }
+                logger.debug("end scanner ");
             } finally {
                 lock.unlock();
             }
-            logger.debug("end scanner ");
         } else {
             logger.debug("scanner task is running.");
         }

@@ -15,17 +15,17 @@
 		<jje.module.stopPort>9988</jje.module.stopPort>
 		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
 		<spring.data.mongodb>1.0.1.RELEASE</spring.data.mongodb>
-        <slf4j.api.version>1.6.1</slf4j.api.version>
-        <slf4j.log4j.version>1.6.1</slf4j.log4j.version>
-        <log4j.version>1.2.16</log4j.version>
-        <junit.version>4.8.2</junit.version>
-        <mockito.version>1.8.1</mockito.version>
-        <cglib.version>2.2</cglib.version>
-        <joda.version>2.0</joda.version>
-        <embedmongo.version>1.10</embedmongo.version>
-        <mongodb.version>2.7.3</mongodb.version>
-        <commons.chain.version>1.2</commons.chain.version>
-        <commons.io.version>2.1</commons.io.version>
+		<slf4j.api.version>1.6.1</slf4j.api.version>
+		<slf4j.log4j.version>1.6.1</slf4j.log4j.version>
+		<log4j.version>1.2.16</log4j.version>
+		<junit.version>4.8.2</junit.version>
+		<mockito.version>1.8.1</mockito.version>
+		<cglib.version>2.2</cglib.version>
+		<joda.version>2.0</joda.version>
+		<embedmongo.version>1.10</embedmongo.version>
+		<mongodb.version>2.7.3</mongodb.version>
+		<commons.chain.version>1.2</commons.chain.version>
+		<commons.io.version>2.1</commons.io.version>
 		<las_home>${basedir}/src/main/resources/</las_home>
 	</properties>
 
@@ -40,25 +40,43 @@
 			<artifactId>mongo-java-driver</artifactId>
 			<version>${mongodb.version}</version>
 		</dependency>
-        <dependency>
-            <groupId>commons-chain</groupId>
-            <artifactId>commons-chain</artifactId>
-            <version>${commons.chain.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>commons-chain</groupId>
+			<artifactId>commons-chain</artifactId>
+			<version>${commons.chain.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>${commons.io.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.api.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${org.springframework.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 			<version>${org.springframework.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -85,39 +103,39 @@
 			<artifactId>joda-time</artifactId>
 			<version>${joda.version}</version>
 		</dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.log4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jms</artifactId>
-                    <groupId>javax.jms</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>jmxri</artifactId>
-                    <groupId>com.sun.jmx</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>jmxtools</artifactId>
-                    <groupId>com.sun.jdmk</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>mail</artifactId>
-                    <groupId>javax.mail</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>jms</artifactId>
+					<groupId>javax.jms</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jmxri</artifactId>
+					<groupId>com.sun.jmx</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jmxtools</artifactId>
+					<groupId>com.sun.jdmk</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>mail</artifactId>
+					<groupId>javax.mail</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
@@ -130,18 +148,18 @@
 			<version>${org.springframework.version}</version>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>${mockito.version}</version>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<!-- servlet provider -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -195,6 +213,10 @@
 						<systemProperty>
 							<name>las_home</name>
 							<value>${basedir}/src/main/resources/</value>
+						</systemProperty>
+						<systemProperty>
+							<name>logFilePath</name>
+							<value>${basedir}</value>
 						</systemProperty>
 					</systemProperties>
 					<contextPath>/</contextPath>

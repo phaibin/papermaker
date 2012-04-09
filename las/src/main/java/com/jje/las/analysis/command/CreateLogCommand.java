@@ -1,4 +1,4 @@
-package com.jje.las.analysis;
+package com.jje.las.analysis.command;
 
 import org.apache.commons.chain.Command;
 import org.apache.commons.chain.Context;
