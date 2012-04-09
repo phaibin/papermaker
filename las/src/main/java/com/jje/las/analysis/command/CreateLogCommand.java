@@ -1,14 +1,12 @@
 package com.jje.las.analysis.command;
 
-import org.apache.commons.chain.Command;
-import org.apache.commons.chain.Context;
-
 import com.jje.las.action.log.Log;
 
-public class CreateLogCommand implements Command {
+public class CreateLogCommand extends AbstractLasCommand {
 
+    @Override
     @SuppressWarnings("unchecked")
-    public boolean execute(Context context) throws Exception {
+    public boolean perform(LasContext context) throws Exception {
         boolean isComplete =false;
         
         Log l = new Log();

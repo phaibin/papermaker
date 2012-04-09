@@ -6,9 +6,12 @@ import java.util.List;
 import org.apache.commons.chain.Chain;
 import org.apache.commons.chain.Command;
 import org.apache.commons.chain.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class AnalysisChain implements Chain {
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private List<Command> commands = new ArrayList<Command>();
     
@@ -41,7 +44,13 @@ public class AnalysisChain implements Chain {
 
         boolean isSuccess = false;
         for(Command cmd : commands){
-            boolean success = cmd.execute(context);
+            boolean success = false;
+            try{
+                success = cmd.execute(context);
+            }catch(Exception e){
+                logger.error(((LasContext)context).getCurrentLine());
+                logger.error("Error execute cmd:", e);
+            }
             if(success){
                 isSuccess = success;
                 break;

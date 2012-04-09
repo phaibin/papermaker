@@ -42,6 +42,8 @@
 			<list>
 				<bean id="createNewLog" class="com.jje.las.analysis.command.CreateLogCommand"></bean>
 				<bean id="log4JCommand" class="com.jje.las.analysis.command.Log4JCommand"></bean>
+				<bean id="accessLogCommand" class="com.jje.las.analysis.command.AccessCommand"></bean>
+                <bean id="weblogicCommand" class="com.jje.las.analysis.command.WeblogicCommand"></bean>
 				<bean id="noopCommand" class="com.jje.las.analysis.command.NoopCommand"></bean>
 			</list>
 		</property>

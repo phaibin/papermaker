@@ -1,0 +1,22 @@
+172.24.88.88 - - [24/Dec/2011:13:19:05 +0800] "GET /resource/hotel/images/list/icon_turndownsanjiao.png HTTP/1.1" 200 1015
+172.24.88.88 - - [24/Dec/2011:13:19:05 +0800] "GET /resource/hotel/images/list/diyPrice_close.gif HTTP/1.1" 200 541
+172.24.88.88 - - [24/Dec/2011:13:19:05 +0800] "GET /resource/hotel/images/list/icon_turnleftsanjiao.png HTTP/1.1" 200 1035
+<Feb 23, 2012 9:21:56 AM CST> <Info> <Management> <BEA-141107> <Version: WebLogic Server 10.3.5.0  Fri Apr 1 20:20:06 PDT 2011 1398638 > 
+<Feb 23, 2012 9:21:57 AM CST> <Notice> <WebLogicServer> <BEA-000365> <Server state changed to STARTING> 
+<Feb 23, 2012 9:21:57 AM CST> <Info> <WorkManager> <BEA-002900> <Initializing self-tuning thread pool> 
+2012-02-09 14:17:43,475 INFO [com.jje.autorental.order.esb.OrderDispatchResource] - 执行同步子订单调度信息, resource url :/autorental/order/syncOrderDispatch
+2012-02-09 14:17:53,479 ERROR [com.jje.autorental.order.esb.OrderDispatchResource] - 执行同步子订单调度信息发生错误, 错误原因org.springframework.jdbc.CannotGetJdbcConnectionException: Could not get JDBC Connection; nested exception is java.sql.SQLException: Internal error: Cannot obtain XAConnection weblogic.common.resourcepool.ResourceLimitException: No resources currently available in pool jjepds to allocate to applications, please increase the size of the pool and retry..
+    at weblogic.common.resourcepool.ResourcePoolImpl.reserveResourceInternal(ResourcePoolImpl.java:577)
+    at weblogic.jdbc.common.internal.HAConnectionPool.reserve(HAConnectionPool.java:154)
+    at weblogic.jdbc.common.internal.ConnectionPoolManager.reserve(ConnectionPoolManager.java:98)
+    at weblogic.jdbc.jta.DataSource.getXAConnectionFromPool(DataSource.java:1677)
+    at weblogic.jdbc.jta.DataSource.getConnection(DataSource.java:446)
+    at weblogic.jdbc.jta.DataSource.connect(DataSource.java:403)
+    at weblogic.jdbc.common.internal.RmiDataSource.getConnection(RmiDataSource.java:364)
+    at weblogic.jdbc.common.internal.RmiDataSource_WLSkel.invoke(Unknown Source)
+    at weblogic.rmi.internal.BasicServerRef.invoke(BasicServerRef.java:668)
+    at weblogic.rmi.cluster.ClusterableServerRef.invoke(ClusterableServerRef.java:232)
+    at weblogic.rmi.internal.wls.WLSExecuteRequest.run(WLSExecuteRequest.java:118)
+    at weblogic.work.ExecuteThread.run(ExecuteThread.java:178)
+
+2012-02-09 14:18:43,323 INFO [com.jje.autorental.order.esb.OrderDispatchResource] - 执行同步子订单调度信息, resource url :/autorental/order/syncOrderDispatch

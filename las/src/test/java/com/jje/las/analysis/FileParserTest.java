@@ -16,7 +16,7 @@ import com.jje.las.LasBaseSpringTest;
 import com.jje.las.action.log.Log;
 import com.jje.las.service.LasLogService;
 
-public class Log4JHandlerTest extends LasBaseSpringTest{
+public class FileParserTest extends LasBaseSpringTest{
         
     @Autowired
     FileParserHandler handler;
@@ -55,6 +55,39 @@ public class Log4JHandlerTest extends LasBaseSpringTest{
         handler.parser(file, "hbp.log");
         verify(mockHandler, atLeast(4)).insert(argument.capture());
         verify(mockHandler, atMost(4)).insert(argument.capture());
+    }
+    
+    @Test
+    public void parseAccessLog() throws Exception{
+        File file = ResourceUtils.getFile("classpath:access.log");
+        LasLogService mockHandler = mock(LasLogService.class);
+        ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
+        handler.setHandle(mockHandler);
+        handler.parser(file, "accesss.log");
+        verify(mockHandler, atLeast(24)).insert(argument.capture());
+        verify(mockHandler, atMost(24)).insert(argument.capture());
+    }
+
+    @Test
+    public void parseWeblogicLog() throws Exception{
+        File file = ResourceUtils.getFile("classpath:weblogic.out.log");
+        LasLogService mockHandler = mock(LasLogService.class);
+        ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
+        handler.setHandle(mockHandler);
+        handler.parser(file, "weblogic.out.log");
+        verify(mockHandler, atLeast(7)).insert(argument.capture());
+        verify(mockHandler, atMost(7)).insert(argument.capture());
+    }
+
+    @Test
+    public void parseComplexLog() throws Exception{
+        File file = ResourceUtils.getFile("classpath:all.log");
+        LasLogService mockHandler = mock(LasLogService.class);
+        ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
+        handler.setHandle(mockHandler);
+        handler.parser(file, "all.log");
+        verify(mockHandler, atLeast(10)).insert(argument.capture());
+        verify(mockHandler, atMost(10)).insert(argument.capture());
     }
 
 }

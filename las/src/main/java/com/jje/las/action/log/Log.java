@@ -15,6 +15,25 @@ public class Log {
     private String detail;
     private String logFrom;
     private String raw;
+    private String ip;
+    private String result;
+    
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
 
     public String getRaw() {
         return raw;

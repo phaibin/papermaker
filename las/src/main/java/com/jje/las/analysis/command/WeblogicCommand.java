@@ -1,23 +1,24 @@
 package com.jje.las.analysis.command;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.jje.las.action.log.Log;
 
-public class Log4JCommand extends AbstractLasCommand{
+public class WeblogicCommand extends AbstractLasCommand{
     
-    String defaultRegex = "(\\d{4}-\\d{2}-\\d{2}) (\\d{2}:\\d{2}:\\d{2},\\d{3}) ([^ ]*) \\[(.*)\\] - (.*)$";
-    String dateFormat = "yyyy-MM-dd HH:mm:ss";
+    String defaultRegex = "<([^<>]*)> <([^<>]*)> <([^<>]*)> <([^<>]*)> <([^<>]*)>";
+    String dateFormat = "MMM dd, yyyy HH:mm:ss aaa z";
 
     SimpleDateFormat simpleFormat;
     Pattern pattern;
 
-    public Log4JCommand() {
+    public WeblogicCommand() {
         super();
         pattern = Pattern.compile(defaultRegex);
-        simpleFormat = new SimpleDateFormat(dateFormat);
+        simpleFormat = new SimpleDateFormat(dateFormat, Locale.ENGLISH);
     }
 
     @Override
@@ -25,11 +26,12 @@ public class Log4JCommand extends AbstractLasCommand{
         boolean isComplete = false;
         String line = context.getCurrentLine();
         Log newLog = context.getNewLog();
-        Matcher m = pattern.matcher(line);
+        Matcher m = pattern.matcher(line.trim());
         if (m.matches() && m.groupCount() == 5) {
-            newLog.setLogTime(simpleFormat.parse(m.group(1) + " " + m.group(2)));
-            newLog.setPriority(m.group(3));
-            newLog.setClassName(m.group(4));
+            newLog.setLogTime(simpleFormat.parse(m.group(1) ));
+            newLog.setPriority(m.group(2));
+            newLog.setModule(m.group(3));
+            newLog.setThread(m.group(4));
             newLog.setMessage(m.group(5));
             newLog.setRaw(line);
             isComplete = true;

@@ -43,6 +43,7 @@ public class FileParserHandler {
             while (it.hasNext()) {
                 context.setCurrentLine(it.nextLine()).setLastLog(last).setFileFrom(from);
                 if (!analysisChain.execute(context)) {
+                    logger.debug("Can't parser line : " + context.getCurrentLine());
                     continue;
                 }
                 Log newLog = context.getNewLog();

@@ -1,0 +1,7 @@
+<Feb 23, 2012 9:21:54 AM> <INFO> <NodeManager> <Server output log file is '/opt/oracle/Middleware/admin/wls_domain/aserver/wls_domain/base_domain/servers/wls_server2/logs/wls_server2.out'>
+<Feb 23, 2012 9:21:54 AM CST> <Info> <Security> <BEA-090905> <Disabling CryptoJ JCE Provider self-integrity check for better startup performance. To enable this check, specify -Dweblogic.security.allowCryptoJDefaultJCEVerification=true> 
+<Feb 23, 2012 9:21:55 AM CST> <Info> <Security> <BEA-090906> <Changing the default Random Number Generator in RSA CryptoJ from ECDRBG to FIPS186PRNG. To disable this change, specify -Dweblogic.security.allowCryptoJDefaultPRNG=true> 
+<Feb 23, 2012 9:21:55 AM CST> <Info> <WebLogicServer> <BEA-000377> <Starting WebLogic Server with Oracle JRockit(R) Version R28.1.4-7-144370-1.6.0_26-20110617-2130-linux-x86_64 from Oracle Corporation> 
+<Feb 23, 2012 9:21:56 AM CST> <Info> <Management> <BEA-141107> <Version: WebLogic Server 10.3.5.0  Fri Apr 1 20:20:06 PDT 2011 1398638 > 
+<Feb 23, 2012 9:21:57 AM CST> <Notice> <WebLogicServer> <BEA-000365> <Server state changed to STARTING> 
+<Feb 23, 2012 9:21:57 AM CST> <Info> <WorkManager> <BEA-002900> <Initializing self-tuning thread pool> 
