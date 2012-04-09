@@ -3,13 +3,11 @@ package com.jje.las.analysis;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import org.apache.commons.chain.Context;
+import org.apache.commons.chain.impl.ContextBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +20,8 @@ public class Log4JHandler implements IHandleLogFile {
 
     private LasLogService handle;
 
+    AnalysisChain analysisChain = new AnalysisChain();
+    
     @Autowired
     public void setHandle(LasLogService handle) {
         this.handle = handle;
@@ -43,54 +43,30 @@ public class Log4JHandler implements IHandleLogFile {
         file.delete();
     }
 
-    protected void parser(InputStream is, String from) throws IOException {
+    @SuppressWarnings("unchecked")
+    protected void parser(InputStream is, String from) throws Exception {
         InputStreamReader isr = new InputStreamReader(is, "UTF-8");
         BufferedReader br = new BufferedReader(isr);
         String line;
         Log last = null;
+        Context context = new ContextBase();
         while ((line = br.readLine()) != null) {
-            Log l = parseLine(line, last);
-            if (last != l) {
-                if (last != null) {
-                    last.setLogFrom(from);
-                    handle.insert(last);
-                }
-                last = l;
+            context.put("currentLine", line);
+            context.put("lastLog", last);
+            context.put("fileFrom", from);
+            boolean success = analysisChain.execute(context);
+            if(!success){
+                continue;
+            }
+            Log newLog = (Log)context.get("newLog");
+            if(newLog != null){
+                handle.insert(last);
+                last = newLog;
             }
         }
-        if (last != null) {
-            last.setLogFrom(from);
-            handle.insert(last);
-        }
+        handle.insert(last);
         br.close();
         isr.close();
     }
 
-    // 2012-02-09 14:31:43,288 INFO
-    // [com.jje.autorental.order.esb.OrderDispatchResource] - 执行同步子订单调度信息,
-    // resource url :/autorental/order/syncOrderDispatch
-    private Log parseLine(String line, Log last) throws IOException {
-        String regex = "(\\d{4}-\\d{2}-\\d{2}) (\\d{2}:\\d{2}:\\d{2},\\d{3}) ([^ ]*) \\[(.*)\\] - (.*)$";
-        Pattern p = Pattern.compile(regex);
-        Matcher m = p.matcher(line);
-        Log l = new Log();
-        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (m.matches() && m.groupCount() == 5) {
-            try {
-                l.setLogTime(simpleFormat.parse(m.group(1) + " " + m.group(2)));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            l.setPriority(m.group(3));
-            l.setClassName(m.group(4));
-            l.setMessage(m.group(5));
-            return l;
-        } else {
-            if (last != null) {
-                last.appendDetail(line + "\n");
-            }
-            return last;
-        }
-
-    }
 }

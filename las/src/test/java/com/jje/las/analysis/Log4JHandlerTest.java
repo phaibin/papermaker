@@ -1,12 +1,13 @@
 package com.jje.las.analysis;
 
-import com.jje.las.action.log.Log;
-import com.jje.las.action.log.LogQueryForm;
-import com.jje.las.action.log.LogQueryResult;
-import com.jje.las.service.LasLogService;
-import java.io.*;
-import java.util.List;
-import org.junit.Ignore;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.atMost;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+import java.io.File;
+import java.io.FileInputStream;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -15,17 +16,17 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.ResourceUtils;
 
-import static org.mockito.Mockito.*;
+import com.jje.las.LasBaseSpringTest;
+import com.jje.las.action.log.Log;
+import com.jje.las.service.LasLogService;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:/META-INF/spring/servlet-context.xml"})
-public class Log4JHandlerTest {
+public class Log4JHandlerTest extends LasBaseSpringTest{
         
     @Autowired
     Log4JHandler handler;
     
     @Test
-    public void parseSimple() throws IOException{
+    public void parseSimple() throws Exception{
         File file = ResourceUtils.getFile("classpath:log4jSimple.log");
         LasLogService mockHandler = mock(LasLogService.class);
         ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
@@ -33,12 +34,13 @@ public class Log4JHandlerTest {
         FileInputStream fis = new FileInputStream(file);
         handler.parser(fis, "hbp.log");
         fis.close();
-        verify(mockHandler, atLeast(33)).insert(argument.capture());
-        verify(mockHandler, atMost(33)).insert(argument.capture());
+        //actual 33, but insert null first, so 34 times
+        verify(mockHandler, atLeast(34)).insert(argument.capture());
+        verify(mockHandler, atMost(34)).insert(argument.capture());
     }
     
     @Test
-    public void parseWithError() throws FileNotFoundException, IOException{
+    public void parseWithError() throws Exception{
         File file = ResourceUtils.getFile("classpath:log4jWithException.log");
         LasLogService mockHandler = mock(LasLogService.class);
         ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
@@ -46,14 +48,14 @@ public class Log4JHandlerTest {
         FileInputStream fis = new FileInputStream(file);
         handler.parser(fis, "hbp.log");
         fis.close();
-        verify(mockHandler, atLeast(5)).insert(argument.capture());
-        verify(mockHandler, atMost(5)).insert(argument.capture());
+        verify(mockHandler, atLeast(6)).insert(argument.capture());
+        verify(mockHandler, atMost(6)).insert(argument.capture());
     }
     
     
     
     @Test
-    public void parseLog4j() throws IOException{
+    public void parseLog4j() throws Exception{
         File file = ResourceUtils.getFile("classpath:log4j.log");
         LasLogService mockHandler = mock(LasLogService.class);
         ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
@@ -61,8 +63,8 @@ public class Log4JHandlerTest {
         FileInputStream fis = new FileInputStream(file);
         handler.parser(fis, "hbp.log");
         fis.close();
-        verify(mockHandler, atLeast(3)).insert(argument.capture());
-        verify(mockHandler, atMost(3)).insert(argument.capture());
+        verify(mockHandler, atLeast(4)).insert(argument.capture());
+        verify(mockHandler, atMost(4)).insert(argument.capture());
     }
 
 }

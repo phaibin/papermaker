@@ -16,7 +16,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.jje.las.action.admin.MonitFile;
-import com.jje.las.analysis.HandleWebLogicLogFile;
 import com.jje.las.analysis.IHandleLogFile;
 import com.jje.las.analysis.Log4JHandler;
 import com.jje.las.service.MonitLogService;
@@ -28,8 +27,6 @@ public class LogScanner {
     private final Lock lock = new ReentrantLock();
     @Autowired
     MonitLogService handler;
-    @Autowired
-    HandleWebLogicLogFile webLogicHandle;
     @Autowired
     Log4JHandler log4jHandle;
 

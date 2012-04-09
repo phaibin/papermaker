@@ -14,6 +14,15 @@ public class Log {
     private String message;
     private String detail;
     private String logFrom;
+    private String raw;
+
+    public String getRaw() {
+        return raw;
+    }
+
+    public void setRaw(String raw) {
+        this.raw = raw;
+    }
 
     public String getLogFrom() {
         return logFrom;

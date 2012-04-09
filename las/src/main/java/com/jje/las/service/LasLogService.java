@@ -36,6 +36,9 @@ public class LasLogService {
     }
 
     public void insert(Log l) {
+        if(l == null ){
+            return;
+        }
         BasicDBObject b = Convert.parseDBObject(l);
         getLogCollection().insert(b);
     }
