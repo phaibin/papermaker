@@ -14,9 +14,6 @@ public class Log4jCommandTest {
 
     @Test
     public void parseSimpleTwo() throws Exception {
-        // log4j pattern %d [%t] %-7p %10c{1} - %m%n
-        // String regex =
-        // "(\\d{4}-\\d{2}-\\d{2}) (\\d{2}:\\d{2}:\\d{2},\\d{3}) ([^ ]*) \\[(.*)\\] - (.*)$";
         String samples = "2012-02-09 14:31:43,288 INFO [com.jje.autorental.order.esb.OrderDispatchResource] - 执行同步子订单调度信息, resource url :/autorental/order/syncOrderDispatch";
         Log4JCommand cmd = new Log4JCommand();
         Log nl = new Log();

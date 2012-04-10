@@ -26,10 +26,12 @@ public class Log4JCommand extends AbstractLasCommand{
         Log newLog = context.getNewLog();
         String line = context.getCurrentLine();
         String from = context.getFileFrom();
-        int idx = from.indexOf(".log");
-        if(idx != -1){
-            String module = from.substring(0, idx);
-            newLog.setModule(module);
+        if(from != null){
+            int idx = from.indexOf(".log");
+            if(idx != -1){
+                String module = from.substring(0, idx);
+                newLog.setModule(module);
+            }
         }
         Matcher m = pattern.matcher(line);
         if (m.matches() && m.groupCount() == 5) {
