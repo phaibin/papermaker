@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LasConfiguration {
 
-    @Value("${las.schema}")
+    @Value("${las.schema.prefix}")
     private String schema;
 
     @Value("${las.error.table}")
@@ -23,6 +23,17 @@ public class LasConfiguration {
 
     @Value("${las.config.table}")
     private String configTable;
+    
+    @Value("${las.associate.interval}")
+    private int interval;
+
+    public int getInterval() {
+        return interval;
+    }
+
+    public void setInterval(int interval) {
+        this.interval = interval;
+    }
 
     public String getConfigTable() {
         return configTable;

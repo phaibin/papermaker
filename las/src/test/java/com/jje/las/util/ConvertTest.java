@@ -8,7 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.jje.las.action.log.Log;
-import com.jje.las.service.LasLogService;
+import com.jje.las.service.LasService;
 import com.mongodb.BasicDBObject;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -16,7 +16,7 @@ import com.mongodb.BasicDBObject;
 public class ConvertTest {
 
 	
-	LasLogService service;
+	LasService service;
 	@Test
 	public  void parseDBObject() 
 	{

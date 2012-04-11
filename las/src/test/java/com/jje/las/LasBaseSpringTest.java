@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:/META-INF/spring/servlet-context.xml"})
 public abstract class LasBaseSpringTest {
-
+    
     @BeforeClass
     public static void init() throws FileNotFoundException{
         String classFile = "log4j.properties";

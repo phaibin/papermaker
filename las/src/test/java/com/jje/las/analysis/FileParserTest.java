@@ -14,7 +14,7 @@ import org.springframework.util.ResourceUtils;
 
 import com.jje.las.LasBaseSpringTest;
 import com.jje.las.action.log.Log;
-import com.jje.las.service.LasLogService;
+import com.jje.las.service.LasService;
 
 public class FileParserTest extends LasBaseSpringTest{
         
@@ -24,7 +24,7 @@ public class FileParserTest extends LasBaseSpringTest{
     @Test
     public void parseSimple() throws Exception{
         File file = ResourceUtils.getFile("classpath:log4jSimple.log");
-        LasLogService mockHandler = mock(LasLogService.class);
+        LasService mockHandler = mock(LasService.class);
         ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
         handler.setHandle(mockHandler);
         handler.parser(file, "hbp.log");
@@ -36,7 +36,7 @@ public class FileParserTest extends LasBaseSpringTest{
     @Test
     public void parseWithError() throws Exception{
         File file = ResourceUtils.getFile("classpath:log4jWithException.log");
-        LasLogService mockHandler = mock(LasLogService.class);
+        LasService mockHandler = mock(LasService.class);
         ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
         handler.setHandle(mockHandler);
         handler.parser(file, "hbp.log");
@@ -49,7 +49,7 @@ public class FileParserTest extends LasBaseSpringTest{
     @Test
     public void parseLog4j() throws Exception{
         File file = ResourceUtils.getFile("classpath:log4j.log");
-        LasLogService mockHandler = mock(LasLogService.class);
+        LasService mockHandler = mock(LasService.class);
         ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
         handler.setHandle(mockHandler);
         handler.parser(file, "hbp.log");
@@ -60,7 +60,7 @@ public class FileParserTest extends LasBaseSpringTest{
     @Test
     public void parseAccessLog() throws Exception{
         File file = ResourceUtils.getFile("classpath:access.log");
-        LasLogService mockHandler = mock(LasLogService.class);
+        LasService mockHandler = mock(LasService.class);
         ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
         handler.setHandle(mockHandler);
         handler.parser(file, "accesss.log");
@@ -71,7 +71,7 @@ public class FileParserTest extends LasBaseSpringTest{
     @Test
     public void parseWeblogicLog() throws Exception{
         File file = ResourceUtils.getFile("classpath:weblogic.out.log");
-        LasLogService mockHandler = mock(LasLogService.class);
+        LasService mockHandler = mock(LasService.class);
         ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
         handler.setHandle(mockHandler);
         handler.parser(file, "weblogic.out.log");
@@ -82,7 +82,7 @@ public class FileParserTest extends LasBaseSpringTest{
     @Test
     public void parseComplexLog() throws Exception{
         File file = ResourceUtils.getFile("classpath:all.log");
-        LasLogService mockHandler = mock(LasLogService.class);
+        LasService mockHandler = mock(LasService.class);
         ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
         handler.setHandle(mockHandler);
         handler.parser(file, "all.log");

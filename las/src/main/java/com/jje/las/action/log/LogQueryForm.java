@@ -12,9 +12,18 @@ public class LogQueryForm {
     private Date end;
     private String priority;
     private String logFrom;
+    private String module;
 
     private int page = 1;
     private int pageSize = 50;
+
+    public String getModule() {
+        return module;
+    }
+
+    public void setModule(String module) {
+        this.module = module;
+    }
 
     public int getPageSize() {
         return pageSize;

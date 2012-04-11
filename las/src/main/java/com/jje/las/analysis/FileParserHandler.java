@@ -13,12 +13,12 @@ import com.jje.las.action.admin.MonitFile;
 import com.jje.las.action.log.Log;
 import com.jje.las.analysis.command.AnalysisChain;
 import com.jje.las.analysis.command.LasContext;
-import com.jje.las.service.LasLogService;
+import com.jje.las.service.LasService;
 
 @Component
 public class FileParserHandler {
 
-    private LasLogService handle;
+    private LasService handle;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -26,13 +26,17 @@ public class FileParserHandler {
     AnalysisChain analysisChain;
 
     @Autowired
-    public void setHandle(LasLogService handle) {
+    public void setHandle(LasService handle) {
         this.handle = handle;
     }
 
-    public void handleLogFile(MonitFile mfile) throws Exception {
-        parser(mfile.getRealFile(), mfile.getFileName());
-        mfile.getRealFile().delete();
+    public void handleLogFile(MonitFile mfile, IAction action) {
+        try {
+            parser(mfile.getRealFile(), mfile.getFileName());
+        } catch (Exception e) {
+            logger.error("Parse exception:", e);
+        }
+        action.perform(mfile);
     }
 
     protected void parser(File file, String from) throws Exception {

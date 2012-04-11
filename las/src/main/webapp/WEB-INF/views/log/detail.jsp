@@ -24,5 +24,8 @@
     <br>
     ${fn:replace(log.detail,vEnter,"<br/>")}
 </div>
+<div>
+${log.raw }
+</div>
 </body>
 </html>

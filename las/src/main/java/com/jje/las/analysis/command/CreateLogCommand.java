@@ -11,6 +11,7 @@ public class CreateLogCommand extends AbstractLasCommand {
         
         Log l = new Log();
         l.setLogFrom(context.getFileFrom());
+        l.setPriority("OTHER");
         context.put("newLog", l);
 
         return isComplete;

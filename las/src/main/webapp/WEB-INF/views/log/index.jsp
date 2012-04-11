@@ -66,8 +66,9 @@
                 <form:option value="DEBUG">DEBUG</form:option>
                 <form:option value="INFO">INFO</form:option>
                 <form:option value="ERROR">ERROR</form:option>
+                <form:option value="OTHER">OTHER</form:option>
             </form:select>
-            系统：<form:input path="logFrom"/>
+            系统：<form:input path="module"/>
             <input type="submit" value="查询" onclick="return doSubmit()"/>
         </form:form>
         <table  border=1 cellspacing=0   width=100% bordercolorlight=#333333 bordercolordark=#efefef top=100px>
@@ -80,8 +81,8 @@
                     <td style="width: 150px">${logItem.logFrom}</td>
                     <td style="width: 230px">${logItem.className}</td>
                     <td >${logItem.message}</td>
-                    <td style="width:90px;"><a href="<c:url value="/log/${logItem.id}"/>">查看详情</a></td>
-                    <td style="width:130px;"><a href="<c:url value="/associate/${logItem.id}"/>">时间关联日志</a></td>
+                    <td style="width:90px;"><a href="<c:url value="/log/${logItem.id}?date=${logItem.logTime }&priority=${logItem.priority }"/>">查看详情</a></td>
+                    <td style="width:130px;"><a href="<c:url value="/associate/${logItem.id}?date=${logItem.logTime }&priority=${logItem.priority }"/>">时间关联日志</a></td>
                 </tr>
             </c:forEach>
         </table>

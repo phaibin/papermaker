@@ -17,7 +17,8 @@ import org.springframework.stereotype.Component;
 
 import com.jje.las.action.admin.MonitFile;
 import com.jje.las.analysis.FileParserHandler;
-import com.jje.las.service.MonitLogService;
+import com.jje.las.analysis.IAction;
+import com.jje.las.service.AdminService;
 
 @Component
 public class LogScanner {
@@ -25,7 +26,7 @@ public class LogScanner {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private final Lock lock = new ReentrantLock();
     @Autowired
-    MonitLogService handler;
+    AdminService handler;
     @Autowired
     FileParserHandler parser;
 
@@ -35,13 +36,13 @@ public class LogScanner {
         if (lock.tryLock()) {
             logger.debug("start scanner");
             try {
-                for (MonitFile log : convertList(handler.list())) {
+                for (MonitFile log : convertList(handler.listMonitorFiles())) {
                     logger.info("perform log file name:" + log.getPath());
-                    try {
-                        parser.handleLogFile(log);
-                    } catch (Exception e) {
-                        logger.error("error in parse file " + log.getFileName(), e);
-                    }
+                    parser.handleLogFile(log, new IAction() {
+                        public void perform(MonitFile mfile) {
+                            mfile.getRealFile().delete();
+                        }
+                    });
                 }
                 logger.debug("end scanner ");
             } finally {
@@ -56,13 +57,13 @@ public class LogScanner {
         List<MonitFile> result = new ArrayList<MonitFile>();
         for (MonitFile log : list) {
             File f = new File(log.getPath());
-            if (!f.exists())
-                continue;
-            Collection<File> fc1 = FileUtils.listFiles(f, null, true);
-            for (File f1 : fc1) {
-                MonitFile mf = new MonitFile(f1.getAbsolutePath(), log.getType());
-                mf.setFileName(f1.getName());
-                result.add(mf);
+            if (f.exists()){
+                Collection<File> fc1 = FileUtils.listFiles(f, null, true);
+                for (File f1 : fc1) {
+                    MonitFile mf = new MonitFile(f1.getAbsolutePath(), log.getType());
+                    mf.setFileName(f1.getName());
+                    result.add(mf);
+                }
             }
         }
         return result;
