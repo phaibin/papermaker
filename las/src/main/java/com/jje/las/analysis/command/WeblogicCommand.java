@@ -5,7 +5,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.jje.las.action.log.Log;
+import com.jje.las.domain.Log;
 
 public class WeblogicCommand extends AbstractLasCommand{
     

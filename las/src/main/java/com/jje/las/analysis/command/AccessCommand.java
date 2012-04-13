@@ -5,7 +5,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.jje.las.action.log.Log;
+import com.jje.las.domain.Log;
 
 public class AccessCommand extends AbstractLasCommand {
     String defaultRegex = "(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}) - - \\[(.*)\\] \"(.*)\" (\\d{1,3}) (\\d{1,8})";

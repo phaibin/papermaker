@@ -13,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jje.las.action.admin.LogDelForm;
-import com.jje.las.action.log.Log;
 import com.jje.las.action.log.LogQueryResult;
 import com.jje.las.config.LasConfiguration;
+import com.jje.las.domain.Log;
+import com.jje.las.domain.MongoLogObject;
 import com.jje.las.handler.MongoHandler;
-import com.jje.las.util.Convert;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -40,7 +40,7 @@ public class LasService {
         if (log == null) {
             return;
         }
-        BasicDBObject b = Convert.parseDBObject(log);
+        DBObject b = MongoLogObject.get(log);
         DBCollection db = getDayPriorityDBTable(log.getLogTime(), log.getPriority());//
         db.insert(b);
     }
@@ -83,11 +83,8 @@ public class LasService {
         }
 
         while (cursor.hasNext()) {
-            BasicDBObject b = (BasicDBObject) cursor.next();
-            Log l = null;
             try {
-                l = (Log) Convert.parseObject(b, Log.class);
-                list.add(l);
+                list.add(MongoLogObject.get(cursor.next()));
             } catch (Exception e) {
                 logger.error("error in query.", e);
             }
@@ -140,10 +137,8 @@ public class LasService {
         DBCursor cursor = collection.find(condition).sort(sort);
         List<Log> list = new ArrayList<Log>();
         while (cursor.hasNext()) {
-            BasicDBObject b = (BasicDBObject) cursor.next();
             try {
-                Log log = (Log) Convert.parseObject(b, Log.class);
-                list.add(log);
+                list.add(MongoLogObject.get(cursor.next()));
             } catch (Exception e) {
                 logger.error("error in query.", e);
             }
@@ -157,8 +152,7 @@ public class LasService {
             DBCollection collection = getDayPriorityDBTable(logTime, priority);
             BasicDBObject searchQuery = new BasicDBObject();
             searchQuery.put("_id", new ObjectId(id));
-            BasicDBObject o = (BasicDBObject) collection.findOne(searchQuery);
-            return (Log) Convert.parseObject(o, Log.class);
+            return MongoLogObject.get( collection.findOne(searchQuery));
         } catch (Exception e) {
             logger.error("error in get ", e);
         }

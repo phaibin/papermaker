@@ -9,10 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jje.las.action.admin.MonitFile;
 import com.jje.las.config.LasConfiguration;
+import com.jje.las.domain.MongoLasAdminObject;
+import com.jje.las.domain.MonitFile;
 import com.jje.las.handler.MongoHandler;
-import com.jje.las.util.Convert;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -33,11 +33,8 @@ public class AdminService {
         DBCursor cursor = getMonitorCollection().find();
         try {
             while (cursor.hasNext()) {
-                BasicDBObject b = (BasicDBObject) cursor.next();
-
                 try {
-                    MonitFile file = (MonitFile) Convert.parseObject(b, MonitFile.class);
-                    list.add(file);
+                    list.add(MongoLasAdminObject.get(cursor.next()));
                 } catch (Exception ex) {
                     logger.error("error in list monit file.", ex);
                 }
@@ -55,7 +52,7 @@ public class AdminService {
     }
 
     public void addFileToMonitor(MonitFile log) {
-        getMonitorCollection().insert(Convert.parseDBObject(log));
+        getMonitorCollection().insert(MongoLasAdminObject.get(log));
     }
 
     private DBCollection getMonitorCollection() {

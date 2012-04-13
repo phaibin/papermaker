@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
 
 import com.jje.las.LasBaseSpringTest;
-import com.jje.las.action.log.Log;
+import com.jje.las.domain.Log;
 import com.jje.las.service.LasService;
 
 public class FileParserTest extends LasBaseSpringTest{

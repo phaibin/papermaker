@@ -2,6 +2,8 @@ package com.jje.las.action.log;
 
 import java.util.List;
 
+import com.jje.las.domain.Log;
+
 public class LogQueryResult {
 
     private List<Log> list;

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.jje.las.domain.Log;
 import com.jje.las.service.LasService;
 import com.jje.las.util.DateTimeEditor;
 

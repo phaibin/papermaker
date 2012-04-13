@@ -7,9 +7,9 @@ import java.util.Locale;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.jje.las.action.log.Log;
 import com.jje.las.analysis.command.LasContext;
 import com.jje.las.analysis.command.WeblogicCommand;
+import com.jje.las.domain.Log;
 
 public class WeblogicCommandTest {
 

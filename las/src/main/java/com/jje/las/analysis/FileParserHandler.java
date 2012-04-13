@@ -9,10 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.jje.las.action.admin.MonitFile;
-import com.jje.las.action.log.Log;
 import com.jje.las.analysis.command.AnalysisChain;
 import com.jje.las.analysis.command.LasContext;
+import com.jje.las.domain.Log;
+import com.jje.las.domain.MonitFile;
 import com.jje.las.service.LasService;
 
 @Component

@@ -1,4 +1,4 @@
-package com.jje.las.action.log;
+package com.jje.las.domain;
 
 import java.util.Date;
 
@@ -139,5 +139,5 @@ public class Log {
         buf.append(line);
         setDetail(buf.toString());
     }
-
+    
 }

@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.jje.las.action.log.Log;
+import com.jje.las.domain.Log;
 
 public class Log4JCommand extends AbstractLasCommand{
     

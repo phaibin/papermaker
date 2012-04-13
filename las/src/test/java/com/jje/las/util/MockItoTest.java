@@ -14,8 +14,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("unchecked")
 public class MockItoTest {
-
     @Test
     public void behaviour() {
         List mockedList = mock(List.class);

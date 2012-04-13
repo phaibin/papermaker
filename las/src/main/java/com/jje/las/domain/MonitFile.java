@@ -1,4 +1,4 @@
-package com.jje.las.action.admin;
+package com.jje.las.domain;
 
 import java.io.File;
 

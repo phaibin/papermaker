@@ -1,6 +1,6 @@
 package com.jje.las.analysis.command;
 
-import com.jje.las.action.log.Log;
+import com.jje.las.domain.Log;
 
 public class NoopCommand extends AbstractLasCommand {
 

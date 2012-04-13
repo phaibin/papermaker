@@ -1,6 +1,6 @@
 package com.jje.las.analysis;
 
-import com.jje.las.action.admin.MonitFile;
+import com.jje.las.domain.MonitFile;
 
 public interface IAction {
 

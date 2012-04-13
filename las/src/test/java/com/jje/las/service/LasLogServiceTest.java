@@ -14,11 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
 
 import com.jje.las.LasBaseSpringTest;
-import com.jje.las.action.admin.MonitFile;
 import com.jje.las.action.log.LogQueryForm;
 import com.jje.las.action.log.LogQueryResult;
 import com.jje.las.analysis.FileParserHandler;
 import com.jje.las.analysis.IAction;
+import com.jje.las.domain.MonitFile;
 
 import de.flapdoodle.embedmongo.MongoDBRuntime;
 import de.flapdoodle.embedmongo.MongodExecutable;

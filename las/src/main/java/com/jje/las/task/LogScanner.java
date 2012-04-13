@@ -15,9 +15,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.jje.las.action.admin.MonitFile;
 import com.jje.las.analysis.FileParserHandler;
 import com.jje.las.analysis.IAction;
+import com.jje.las.domain.MonitFile;
 import com.jje.las.service.AdminService;
 
 @Component

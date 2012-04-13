@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import org.apache.commons.chain.Context;
 
-import com.jje.las.action.log.Log;
+import com.jje.las.domain.Log;
 
 @SuppressWarnings({ "serial", "rawtypes", "unchecked" })
 public class LasContext extends HashMap implements Context {
