@@ -19,6 +19,7 @@ import com.jje.las.domain.Log;
 import com.jje.las.domain.MongoLogObject;
 import com.jje.las.handler.MongoHandler;
 import com.mongodb.BasicDBObject;
+import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
@@ -57,7 +58,9 @@ public class LasService {
         } else {
             db = handler.getCollection(conf.getSchema() + today, conf.getOtherTable());
         }
-
+        BasicDBObjectBuilder idx = BasicDBObjectBuilder.start();
+        DBObject idxObj = idx.add("logTime", -1).add("priority", 1).add("module", 1).get();
+        db.ensureIndex(idxObj);
         return db;
     }
 
