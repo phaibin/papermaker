@@ -27,7 +27,7 @@
 			<version>${joptsimple.version}</version>
 		</dependency>
 		<dependency>
-            <groupId>commons-exec</groupId>
+            <groupId>org.apache.commons</groupId>
             <artifactId>commons-exec</artifactId>
             <version>${commons.exec.version}</version>
         </dependency>
