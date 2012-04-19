@@ -8,6 +8,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static joptsimple.util.DateConverter.*;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -99,7 +101,12 @@ public class JOptTest {
         };
 
         try {
-            parser.printHelpOn(System.out);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            parser.printHelpOn(os);
+            byte[] byteArray = os.toByteArray();
+            os.close();
+            String outputStr = new String(byteArray).trim();
+            assertTrue(outputStr.endsWith("verbose"));
         } catch (IOException e) {
             fail();
         }

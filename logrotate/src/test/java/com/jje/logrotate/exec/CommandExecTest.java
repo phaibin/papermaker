@@ -16,9 +16,9 @@ public class CommandExecTest {
         ExecuteWatchdog watchdog = new ExecuteWatchdog(30000);
         Executor exec = new DefaultExecutor();
         exec.setWatchdog(watchdog);
-        String line = "ls -l";
+        String line = "echo abc";
         if (OS.isFamilyWindows()) {
-            line = "cmd.exe /C dir";
+            line = "cmd.exe /C echo abc";
         }
         CommandLine cl = CommandLine.parse(line);
         try {
