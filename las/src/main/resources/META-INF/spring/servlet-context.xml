@@ -43,12 +43,24 @@
 				<bean id="createNewLog" class="com.jje.las.analysis.command.CreateLogCommand"></bean>
 				<bean id="log4JCommand" class="com.jje.las.analysis.command.Log4JCommand"></bean>
 				<bean id="accessLogCommand" class="com.jje.las.analysis.command.AccessCommand"></bean>
-                <bean id="weblogicCommand" class="com.jje.las.analysis.command.WeblogicCommand"></bean>
+				<bean id="weblogicCommand" class="com.jje.las.analysis.command.WeblogicCommand"></bean>
 				<bean id="noopCommand" class="com.jje.las.analysis.command.NoopCommand"></bean>
+			</list>
+		</property>
+		<property name="listeners">
+			<list>
+				<bean id="notifyCommandListener" class="com.jje.las.analysis.notify.NotifyListener"></bean>
 			</list>
 		</property>
 	</bean>
 
+	<bean id="mailNotify" class="com.jje.las.analysis.notify.MailNotify">
+		<property name="mailSender" ref="mailSender" />
+	</bean>
+
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="mail.jinjiang.com" />
+	</bean>
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/views/" />

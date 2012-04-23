@@ -26,10 +26,16 @@
 		<mongodb.version>2.7.3</mongodb.version>
 		<commons.chain.version>1.2</commons.chain.version>
 		<commons.io.version>2.1</commons.io.version>
+		<javax.mail.version>1.4.5</javax.mail.version>
 		<las_home>${basedir}/src/main/resources/</las_home>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>${javax.mail.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>de.flapdoodle.embedmongo</groupId>
 			<artifactId>de.flapdoodle.embedmongo</artifactId>
@@ -175,10 +181,10 @@
 		</dependency>
 	</dependencies>
 
-    <scm>
-        <connection>scm:git:git@github.com:xuhaixiang/papermaker.git/las</connection>
-        <url>git@github.com:xuhaixiang/papermaker.git/las</url>
-    </scm>
+	<scm>
+		<connection>scm:git:git@github.com:xuhaixiang/papermaker.git/las</connection>
+		<url>git@github.com:xuhaixiang/papermaker.git/las</url>
+	</scm>
 
 	<build>
 		<plugins>

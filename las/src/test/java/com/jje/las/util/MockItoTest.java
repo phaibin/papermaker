@@ -1,20 +1,19 @@
 package com.jje.las.util;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.mockito.ArgumentMatcher;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@SuppressWarnings("unchecked")
+import java.util.LinkedList;
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.mockito.ArgumentMatcher;
+
+@SuppressWarnings({"unchecked","rawtypes"})
 public class MockItoTest {
     @Test
     public void behaviour() {

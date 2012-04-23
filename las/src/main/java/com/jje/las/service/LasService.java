@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.jje.las.action.admin.LogDelForm;
 import com.jje.las.action.log.LogQueryResult;
-import com.jje.las.config.LasConfiguration;
+import com.jje.las.config.MongoConfiguration;
 import com.jje.las.domain.Log;
 import com.jje.las.domain.MongoLogObject;
 import com.jje.las.handler.MongoHandler;
@@ -31,7 +31,7 @@ public class LasService {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    LasConfiguration conf;
+    MongoConfiguration conf;
     @Autowired
     MongoHandler handler;
 

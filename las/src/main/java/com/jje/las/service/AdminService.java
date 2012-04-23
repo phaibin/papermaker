@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jje.las.config.LasConfiguration;
+import com.jje.las.config.MongoConfiguration;
 import com.jje.las.domain.MongoLasAdminObject;
 import com.jje.las.domain.MonitFile;
 import com.jje.las.handler.MongoHandler;
@@ -24,9 +24,9 @@ public class AdminService {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    LasConfiguration conf;
-    @Autowired
     MongoHandler handler;
+    @Autowired
+    MongoConfiguration conf;
 
     public List<MonitFile> listMonitorFiles() {
         List<MonitFile> list = new ArrayList<MonitFile>();
