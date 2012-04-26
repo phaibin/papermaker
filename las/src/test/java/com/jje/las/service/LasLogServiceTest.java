@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +18,7 @@ import com.jje.las.analysis.FileParserHandler;
 import com.jje.las.analysis.IAction;
 import com.jje.las.domain.MonitFile;
 
-import de.flapdoodle.embedmongo.MongoDBRuntime;
-import de.flapdoodle.embedmongo.MongodExecutable;
-import de.flapdoodle.embedmongo.MongodProcess;
-import de.flapdoodle.embedmongo.config.MongodConfig;
-import de.flapdoodle.embedmongo.distribution.Version;
-
-@Ignore//TODO: for maven run fail.
+@Ignore //TODO need mongod start
 public class LasLogServiceTest extends LasBaseSpringTest {
 
     private static final java.text.SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -35,24 +27,6 @@ public class LasLogServiceTest extends LasBaseSpringTest {
     @Autowired
     FileParserHandler handler;
     
-    private MongodExecutable _mongodExe;
-    private MongodProcess _mongod;
-
-    @Before
-    public void setUp() throws Exception {
-        MongoDBRuntime runtime = MongoDBRuntime.getDefaultInstance();
-        _mongodExe = runtime.prepare(new MongodConfig(Version.V2_0, 27017, false));
-        _mongod=_mongodExe.start();
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        _mongod.stop();
-        _mongodExe.cleanup();
-    }
-
-
     @Test
     @Ignore//Only one method support. see below TODO: 1 
     public void query_Validator_Enable() throws IOException, ParseException {

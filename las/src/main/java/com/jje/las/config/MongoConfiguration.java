@@ -105,7 +105,7 @@ public class MongoConfiguration {
 
     @Override
     public String toString() {
-        return "mongo configuration with host:" + host + " port : " + port;
+        return "mongo configuration with host:" + host + " port : " + port +" schema : "+schema;
     }
 
 }

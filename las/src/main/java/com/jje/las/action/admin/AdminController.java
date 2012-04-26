@@ -1,7 +1,6 @@
 package com.jje.las.action.admin;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,9 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.jje.las.config.LasConfiguration;
 import com.jje.las.domain.MonitFile;
 import com.jje.las.service.LasService;
-import com.jje.las.service.AdminService;
 import com.jje.las.task.LogScanner;
 import com.jje.las.util.DateTimeEditor;
 
@@ -25,13 +24,13 @@ import com.jje.las.util.DateTimeEditor;
 public class AdminController {
 
     @Autowired
-    AdminService ms;
-
-    @Autowired
     LogScanner scanner;
 
     @Autowired
     LasService ls;
+    
+    @Autowired
+    LasConfiguration conf;
 
     @InitBinder
     protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
@@ -40,7 +39,7 @@ public class AdminController {
 
     @RequestMapping(method = RequestMethod.GET, value = { "/", "/index" })
     public String index(Model model) {
-        model.addAttribute("logs", ms.listMonitorFiles());
+        model.addAttribute("logs", conf.getScanPaths());
         return "admin/index";
     }
 
@@ -51,23 +50,22 @@ public class AdminController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = { "/create" })
-    public String save(MonitFile log, Model model) {
-        ms.addFileToMonitor(log);
-        model.addAttribute("logs", ms.listMonitorFiles());
+    public String save(MonitFile mf, Model model) {
+        conf.addScanPath(mf);
+        model.addAttribute("logs", conf.getScanPaths());
         return "admin/index";
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/delete/{id}")
     public String delete(MonitFile log, @PathVariable String id, Model model) {
-        ms.removeFileMonitor(id);
-        List<MonitFile> list = ms.listMonitorFiles();
-        model.addAttribute("logs", list);
+        conf.removeScanPath(id);
+        model.addAttribute("logs", conf.getScanPaths());
         return "admin/index";
     }
 
     @RequestMapping(method = RequestMethod.GET, value = { "/start" })
     public String start(Model model) {
-        model.addAttribute("logs", ms.listMonitorFiles());
+        model.addAttribute("logs", conf.getScanPaths());
         scanner.perform();
         return "admin/index";
     }
@@ -80,8 +78,8 @@ public class AdminController {
 
     @RequestMapping(method = RequestMethod.POST, value = { "/deletelog" })
     public String goDelete(LogDelForm logDelForm, Model model) {
-        ls.delete(logDelForm);
-        model.addAttribute("logs", ms.listMonitorFiles());
+//        ls.delete(logDelForm);
+        model.addAttribute("logs", conf.getScanPaths());
         return "admin/index";
     }
 

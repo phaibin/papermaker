@@ -59,7 +59,13 @@
 	</bean>
 
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="mail.jinjiang.com" />
+        <property name="host" value="121.37.40.145"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">false</prop>
+                <prop key="mail.smtp.timeout">25000</prop>
+            </props>
+        </property>
 	</bean>
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">

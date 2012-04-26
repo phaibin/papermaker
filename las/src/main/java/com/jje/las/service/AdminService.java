@@ -3,7 +3,6 @@ package com.jje.las.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,7 @@ public class AdminService {
 
     public void removeFileMonitor(String id) {
         BasicDBObject deleteObject = new BasicDBObject();
-        deleteObject.put("_id", new ObjectId(id));
+        deleteObject.put("_id", id);
         getMonitorCollection().remove(deleteObject);
     }
 

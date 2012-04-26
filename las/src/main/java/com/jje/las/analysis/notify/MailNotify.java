@@ -8,6 +8,7 @@ import org.springframework.mail.SimpleMailMessage;
 
 public class MailNotify {
     Logger logger = LoggerFactory.getLogger(this.getClass());
+    
     private MailSender mailSender;
 
     public void setMailSender(MailSender mailSender) {
@@ -22,7 +23,7 @@ public class MailNotify {
         msg.setText(content);
         try {
             this.mailSender.send(msg);
-        } catch (MailException ex) {
+        } catch (Exception ex) {
             logger.error("send email error.", ex);
         }
     }

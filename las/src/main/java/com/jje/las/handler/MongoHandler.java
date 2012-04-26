@@ -43,6 +43,7 @@ public class MongoHandler {
     }
 
     public void refresh() {
+        logger.info("refresh mongo handler.");
         destory();
         init();
     }
