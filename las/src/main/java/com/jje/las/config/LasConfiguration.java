@@ -15,9 +15,19 @@ public class LasConfiguration {
 
     @Autowired
     AdminService ms;
+    
+    Long scanInterval = 5*60*1000L;
 
     List<MonitFile> scanPaths = new ArrayList<MonitFile>();
     
+    public Long getScanInterval() {
+        return scanInterval;
+    }
+
+    public void setScanInterval(Long scanInterval) {
+        this.scanInterval = scanInterval;
+    }
+
     public void setAdminService(AdminService admin){
         ms = admin;
     }

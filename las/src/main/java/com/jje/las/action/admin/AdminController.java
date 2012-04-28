@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.jje.las.config.LasConfiguration;
 import com.jje.las.domain.MonitFile;
 import com.jje.las.service.LasService;
-import com.jje.las.task.LogScanner;
+import com.jje.las.task.LasTimer;
 import com.jje.las.util.DateTimeEditor;
 
 @Controller
@@ -24,13 +24,13 @@ import com.jje.las.util.DateTimeEditor;
 public class AdminController {
 
     @Autowired
-    LogScanner scanner;
-
-    @Autowired
     LasService ls;
     
     @Autowired
     LasConfiguration conf;
+    
+    @Autowired
+    LasTimer lasTimer;
 
     @InitBinder
     protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
@@ -66,7 +66,7 @@ public class AdminController {
     @RequestMapping(method = RequestMethod.GET, value = { "/start" })
     public String start(Model model) {
         model.addAttribute("logs", conf.getScanPaths());
-        scanner.perform();
+        lasTimer.manualStart();
         return "admin/index";
     }
 
