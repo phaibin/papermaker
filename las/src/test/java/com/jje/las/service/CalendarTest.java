@@ -16,7 +16,7 @@ public class CalendarTest {
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
         String today = df.format(new Date());
         Calendar calendar = Calendar.getInstance();
-        String ctoday = String.format("%1$tY%1$tm%1$te", calendar);
+        String ctoday = String.format("%1$tY%1$tm%1$td", calendar);
         Assert.assertEquals(today, ctoday);
    }
    

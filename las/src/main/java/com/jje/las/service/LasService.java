@@ -41,9 +41,7 @@ public class LasService {
         if (log == null) {
             return;
         }
-        DBObject b = MongoLogObject.get(log);
-        DBCollection db = getDayPriorityDBTable(log.getLogTime(), log.getPriority());//
-        db.insert(b);
+        getDayPriorityDBTable(log.getLogTime(), log.getPriority()).insert(MongoLogObject.get(log));
     }
 
     private DBCollection getDayPriorityDBTable(Date d, String priority) {
