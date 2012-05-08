@@ -29,5 +29,15 @@ public class Log4jCommandTest {
         Assert.assertEquals("执行同步子订单调度信息, resource url :/autorental/order/syncOrderDispatch", nl.getMessage());
 
     }
+    
+    @Test
+    public void parseSimple() throws Exception{
+        String s = "2012-01-10 19:40:14,091 WARN [com.mchange.v2.c3p0.DriverManagerDataSource] - Could not load driverClass org.h2.Driver";
+        Log4JCommand cmd = new Log4JCommand();
+        Log nl = new Log();
+        LasContext ctx = new LasContext();
+        ctx.setCurrentLine(s).setNewLog(nl);
+        Assert.assertTrue(cmd.execute(ctx));
+    }
 
 }

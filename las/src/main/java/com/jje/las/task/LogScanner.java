@@ -1,10 +1,14 @@
 package com.jje.las.task;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.TimerTask;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -54,13 +58,26 @@ public class LogScanner extends TimerTask{
         if (lock.tryLock()) {
             logger.debug("start scanner");
             try {
-                for (MonitFile log : convertList(handler.listMonitorFiles())) {
-                    logger.debug("perform log file name:" + log.getPath());
-                    parser.handleLogFile(log, new IAction() {
-                        public void perform(MonitFile mfile) {
-                            mfile.getRealFile().delete();
+                List<MonitFile> convertList = convertList(handler.listMonitorFiles());
+                final CountDownLatch latch = new CountDownLatch(convertList.size());
+                ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1);
+                for (final MonitFile log : convertList) {
+                    threadPool.submit(new Runnable() {
+                        public void run() {
+                            logger.debug("perform log file name:" + log.getPath());
+                            parser.handleLogFile(log, new IAction() {
+                                public void perform(MonitFile mfile) {
+                                    mfile.getRealFile().delete();
+                                }
+                            });
+                            latch.countDown();
                         }
                     });
+                }
+                try {
+                    latch.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
                 logger.debug("end scanner ");
             } finally {

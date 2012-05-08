@@ -54,6 +54,7 @@ public class AnalysisChain implements Chain {
             try {
                 success = cmd.execute(context);
             } catch (Exception e) {
+                logger.error(((LasContext) context).getFileFrom());
                 logger.error(((LasContext) context).getCurrentLine());
                 logger.error("Error execute cmd:", e);
             }
