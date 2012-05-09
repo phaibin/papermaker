@@ -57,7 +57,8 @@
         <a href="<c:url value="/admin/index"/>" style="left:10px;">监控日志管理</a>
     </div>
     <div>日志查询</div>
-        <form:form modelAttribute="logQueryForm" id="LogQueryForm" method="POST" action="/query">
+        <c:url value="/query" var="logQueryFormQueryAction"/>
+        <form:form modelAttribute="logQueryForm" id="LogQueryForm" action="${logQueryFormQueryAction }" method="POST" >
             <form:hidden path="page"/>
             开始日期：<form:input path="begin" />
             结束日期：<form:input path="end" />
