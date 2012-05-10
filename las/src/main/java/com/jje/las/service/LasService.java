@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.jje.las.action.admin.LogDelForm;
 import com.jje.las.action.log.LogQueryResult;
+import com.jje.las.config.LasConfiguration;
 import com.jje.las.config.MongoConfiguration;
 import com.jje.las.domain.Log;
 import com.jje.las.domain.MongoLogObject;
@@ -32,6 +33,8 @@ public class LasService {
 
     @Autowired
     MongoConfiguration conf;
+    @Autowired
+    LasConfiguration lasConf;
     @Autowired
     MongoHandler handler;
 
@@ -116,9 +119,9 @@ public class LasService {
     public List<Log> associateQuery(Log l) {
         Calendar c = Calendar.getInstance();
         c.setTime(l.getLogTime());
-        c.add(Calendar.SECOND, -conf.getInterval());
+        c.add(Calendar.SECOND, -lasConf.getInterval());
         Date from = c.getTime();
-        c.add(Calendar.SECOND, conf.getInterval() * 2);
+        c.add(Calendar.SECOND, lasConf.getInterval() * 2);
         Date to = c.getTime();
 
         DBObject condition = QueryBuilder.start("logTime").greaterThanEquals(from).and("logTime").lessThanEquals(to)

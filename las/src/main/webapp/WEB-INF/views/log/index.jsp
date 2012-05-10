@@ -28,6 +28,7 @@
        
        function doSubmit()
        {
+    	   document.getElementById("page").value = 1;
     	   var begin =document.getElementById("begin").value;
     	   var end =document.getElementById("end").value;
     	   if(null!=begin && ""!=begin)

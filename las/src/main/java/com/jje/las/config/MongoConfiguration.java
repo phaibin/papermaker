@@ -28,16 +28,6 @@ public class MongoConfiguration {
     @Value("${las.config.table}")
     private String configTable;
 
-    @Value("${las.associate.interval}")
-    private int interval;
-
-    public int getInterval() {
-        return interval;
-    }
-
-    public void setInterval(int interval) {
-        this.interval = interval;
-    }
 
     public String getConfigTable() {
         return configTable;

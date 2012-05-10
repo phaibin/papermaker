@@ -18,7 +18,17 @@ public class LasConfiguration {
     
     Long scanInterval = 5*60*1000L;
 
+    int interval=3;
+
     List<MonitFile> scanPaths = new ArrayList<MonitFile>();
+    
+    public int getInterval() {
+        return interval;
+    }
+
+    public void setInterval(int interval) {
+        this.interval = interval;
+    }
     
     public Long getScanInterval() {
         return scanInterval;
