@@ -8,6 +8,7 @@ public class MonitFile {
     private String fileName;
     private String path;
     private String type;
+    private String encoding="UTF-8";
 
     public MonitFile() {
     }
@@ -57,5 +58,13 @@ public class MonitFile {
             throw new RuntimeException("File doesn't exists."+file);
         }
         return file;
+    }
+
+    public String getEncoding() {
+        return encoding;
+    }
+
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
     }
 }

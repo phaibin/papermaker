@@ -30,7 +30,7 @@ public class AccessCommand extends AbstractLasCommand {
             newLog.setLogTime(simpleFormat.parse(m.group(2)));
             newLog.setIp(m.group(1));
             newLog.setResult(m.group(4) + " " + m.group(5));
-            newLog.setPriority("OTHER");
+            newLog.setPriority("ACCESS");
             newLog.setModule("access");
             newLog.setClassName("");
             newLog.setMessage(m.group(3));

@@ -46,4 +46,17 @@ public class LasConfigurationTest {
         return mf.getId();
     }
     
+    @Test
+    public void getPriorities(){
+        LasConfiguration lc = new LasConfiguration();
+        String[] prioritys = lc.getPrioritys();
+        Assert.assertEquals("error", prioritys[0]);
+        Assert.assertEquals(4, prioritys.length);
+        lc.setPriority("a,b,c");
+        prioritys = lc.getPrioritys();
+        Assert.assertEquals("c", prioritys[2]);
+        Assert.assertEquals(3, prioritys.length);
+        
+    }
+    
 }

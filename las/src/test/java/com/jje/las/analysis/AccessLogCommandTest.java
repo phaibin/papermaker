@@ -24,7 +24,7 @@ public class AccessLogCommandTest {
         Date date = simpleFormat.parse("24/Dec/2011:13:16:29 +0800");
         Assert.assertTrue(cmd.execute(ctx));
         Assert.assertEquals(date, nl.getLogTime());
-        Assert.assertEquals("OTHER", nl.getPriority());
+        Assert.assertEquals("ACCESS", nl.getPriority());
         Assert.assertEquals("", nl.getClassName());
         Assert.assertEquals("200 1553", nl.getResult());
         Assert.assertEquals("172.24.88.88", nl.getIp());

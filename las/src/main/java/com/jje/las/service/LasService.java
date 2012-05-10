@@ -48,16 +48,9 @@ public class LasService {
     }
 
     private DBCollection getDayPriorityDBTable(Date d, String priority) {
-        String today = dateFormat.format(d);
-        DBCollection db;
-        if (priority.equals("ERROR")) {
-            db = handler.getCollection(conf.getSchema() + today, conf.getErrorTable());
-        } else if (priority.equals("INFO")) {
-            db = handler.getCollection(conf.getSchema() + today, conf.getInfoTable());
-        } else if (priority.equals("DEBUG")) {
-            db = handler.getCollection(conf.getSchema() + today, conf.getDebugTable());
-        } else {
-            db = handler.getCollection(conf.getSchema() + today, conf.getOtherTable());
+        DBCollection db=handler.getCollection(conf.getSchema() + dateFormat.format(d), conf.getDataTable(priority));
+        if(logger.isDebugEnabled()){
+            logger.debug("get day priority db table:"+db.getFullName());
         }
         BasicDBObjectBuilder idx = BasicDBObjectBuilder.start();
         DBObject idxObj = idx.add("logTime", -1).add("priority", 1).add("module", 1).get();
@@ -69,8 +62,7 @@ public class LasService {
         valid(from, to, priority, module);
         List<Log> list = new ArrayList<Log>();
         DBCollection collection = getDayPriorityDBTable(from, priority);
-        QueryBuilder qb = QueryBuilder.start("logTime").greaterThanEquals(from).and("logTime").lessThanEquals(to)
-                .and("priority").is(priority);
+        QueryBuilder qb = QueryBuilder.start("logTime").greaterThanEquals(from).and("logTime").lessThanEquals(to);
         if(!module.equals("")){
             qb.and("module").is(module);
         }
@@ -129,10 +121,10 @@ public class LasService {
         DBObject sort = QueryBuilder.start("logTime").is(-1).get();
         logger.info("query object in associate query:" + condition);
         List<Log> results = new ArrayList<Log>();
-        results.addAll(query(l, "ERROR", condition, sort));
-        results.addAll(query(l, "INFO", condition, sort));
-        results.addAll(query(l, "DEBUG", condition, sort));
-        results.addAll(query(l, "OTHER", condition, sort));
+        String[] prioritys = lasConf.getPrioritys();
+        for(String p : prioritys){
+            results.addAll(query(l, p, condition, sort));
+        }
         return results;
     }
 

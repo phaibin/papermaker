@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.jje.las.domain.MonitFile;
 import com.jje.las.service.AdminService;
@@ -19,6 +20,8 @@ public class LasConfiguration {
     Long scanInterval = 5*60*1000L;
 
     int interval=3;
+    
+    private String priority = "error,info,debug,other";
 
     List<MonitFile> scanPaths = new ArrayList<MonitFile>();
     
@@ -71,6 +74,18 @@ public class LasConfiguration {
             scanPaths.remove(mf);
             ms.removeFileMonitor(id);
         }
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+    
+    public String[] getPrioritys(){
+        return StringUtils.commaDelimitedListToStringArray(getPriority());
     }
     
 }

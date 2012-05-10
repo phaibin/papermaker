@@ -2,6 +2,7 @@ package com.jje.las.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Component
 public class MongoConfiguration {
@@ -13,21 +14,15 @@ public class MongoConfiguration {
     @Value("${las.schema.prefix}")
     private String schema;
 
-    @Value("${las.error.table}")
-    private String errorTable;
-
-    @Value("${las.info.table}")
-    private String infoTable;
-
-    @Value("${las.debug.table}")
-    private String debugTable;
-
-    @Value("${las.other.table}")
-    private String otherTable;
-
     @Value("${las.config.table}")
     private String configTable;
 
+    public String getDataTable(String priority) {
+        if(!StringUtils.hasLength(priority)){
+            priority = "other";
+        }
+        return "t_" + priority.toLowerCase();
+    }
 
     public String getConfigTable() {
         return configTable;
@@ -43,38 +38,6 @@ public class MongoConfiguration {
 
     public void setSchema(String schema) {
         this.schema = schema;
-    }
-
-    public String getErrorTable() {
-        return errorTable;
-    }
-
-    public void setErrorTable(String errorTable) {
-        this.errorTable = errorTable;
-    }
-
-    public String getInfoTable() {
-        return infoTable;
-    }
-
-    public void setInfoTable(String infoTable) {
-        this.infoTable = infoTable;
-    }
-
-    public String getDebugTable() {
-        return debugTable;
-    }
-
-    public void setDebugTable(String debugTable) {
-        this.debugTable = debugTable;
-    }
-
-    public String getOtherTable() {
-        return otherTable;
-    }
-
-    public void setOtherTable(String otherTable) {
-        this.otherTable = otherTable;
     }
 
     public String getHost() {
@@ -95,7 +58,7 @@ public class MongoConfiguration {
 
     @Override
     public String toString() {
-        return "mongo configuration with host:" + host + " port : " + port +" schema : "+schema;
+        return "mongo configuration with host:" + host + " port : " + port + " schema : " + schema;
     }
 
 }

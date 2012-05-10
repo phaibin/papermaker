@@ -65,10 +65,9 @@
             结束日期：<form:input path="end" />
             日志级别：
             <form:select path="priority" >
-                <form:option value="DEBUG">DEBUG</form:option>
-                <form:option value="INFO">INFO</form:option>
-                <form:option value="ERROR">ERROR</form:option>
-                <form:option value="OTHER">OTHER</form:option>
+            <c:forEach items="${priorityList }" var="item">
+                <form:option value="${item }">${item }</form:option>
+            </c:forEach>
             </form:select>
             系统：<form:input path="module"/>
             <input type="submit" value="查询" onclick="return doSubmit()"/>

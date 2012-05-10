@@ -27,7 +27,7 @@ public class FileParserTest extends LasBaseSpringTest{
         LasService mockHandler = mock(LasService.class);
         ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
         handler.setHandle(mockHandler);
-        handler.parser(file, "hbp.log");
+        handler.parser(file, "hbp.log", "UTF-8");
         //actual 33, but insert null first, so 34 times
         verify(mockHandler, atLeast(34)).insert(argument.capture());
         verify(mockHandler, atMost(34)).insert(argument.capture());
@@ -39,7 +39,7 @@ public class FileParserTest extends LasBaseSpringTest{
         LasService mockHandler = mock(LasService.class);
         ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
         handler.setHandle(mockHandler);
-        handler.parser(file, "hbp.log");
+        handler.parser(file, "hbp.log", "UTF-8");
         verify(mockHandler, atLeast(6)).insert(argument.capture());
         verify(mockHandler, atMost(6)).insert(argument.capture());
     }
@@ -52,7 +52,7 @@ public class FileParserTest extends LasBaseSpringTest{
         LasService mockHandler = mock(LasService.class);
         ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
         handler.setHandle(mockHandler);
-        handler.parser(file, "hbp.log");
+        handler.parser(file, "hbp.log", "UTF-8");
         verify(mockHandler, atLeast(4)).insert(argument.capture());
         verify(mockHandler, atMost(4)).insert(argument.capture());
     }
@@ -63,7 +63,7 @@ public class FileParserTest extends LasBaseSpringTest{
         LasService mockHandler = mock(LasService.class);
         ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
         handler.setHandle(mockHandler);
-        handler.parser(file, "accesss.log");
+        handler.parser(file, "accesss.log", "UTF-8");
         verify(mockHandler, atLeast(24)).insert(argument.capture());
         verify(mockHandler, atMost(24)).insert(argument.capture());
     }
@@ -74,7 +74,7 @@ public class FileParserTest extends LasBaseSpringTest{
         LasService mockHandler = mock(LasService.class);
         ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
         handler.setHandle(mockHandler);
-        handler.parser(file, "weblogic.out.log");
+        handler.parser(file, "weblogic.out.log", "UTF-8");
         verify(mockHandler, atLeast(7)).insert(argument.capture());
         verify(mockHandler, atMost(7)).insert(argument.capture());
     }
@@ -85,7 +85,7 @@ public class FileParserTest extends LasBaseSpringTest{
         LasService mockHandler = mock(LasService.class);
         ArgumentCaptor<Log> argument = ArgumentCaptor.forClass(Log.class);
         handler.setHandle(mockHandler);
-        handler.parser(file, "all.log");
+        handler.parser(file, "all.log", "UTF-8");
         verify(mockHandler, atLeast(10)).insert(argument.capture());
         verify(mockHandler, atMost(10)).insert(argument.capture());
     }

@@ -1,6 +1,7 @@
 package com.jje.las.action.log;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.jje.las.config.LasConfiguration;
 import com.jje.las.domain.Log;
 import com.jje.las.service.LasService;
 import com.jje.las.util.DateTimeEditor;
@@ -26,6 +28,9 @@ public class IndexController {
 
     @Autowired
     LasService l;
+    
+    @Autowired
+    LasConfiguration conf;
 
     @InitBinder
     protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
@@ -34,7 +39,8 @@ public class IndexController {
 
     @RequestMapping(value = { "", "/index" })
     public String index(LogQueryForm form, Model model) {
-        form.setPriority("ERROR");
+        String[] prioritys = conf.getPrioritys();
+        form.setPriority(prioritys[0]);
         Calendar calendar = Calendar.getInstance();
         form.setEnd(calendar.getTime());
         calendar.add(Calendar.HOUR, -1);
@@ -43,14 +49,17 @@ public class IndexController {
         LogQueryResult r = l.query(form.getBegin(), form.getEnd(), form.getPriority(), form.getModule(), form.getPage(), form.getPageSize());
         model.addAttribute("logs", r.getList());
         model.addAttribute("totalPage", r.getTotalPage());
+        model.addAttribute("priorityList", Arrays.asList(prioritys));
         return "/log/index";
     }
 
     @RequestMapping(value = "/query")
     public String query(LogQueryForm form, Model model) {
+        String[] prioritys = conf.getPrioritys();
         LogQueryResult r = l.query(form.getBegin(), form.getEnd(), form.getPriority(), form.getModule(), form.getPage(), form.getPageSize());
         model.addAttribute("logs", r.getList());
         model.addAttribute("totalPage", r.getTotalPage());
+        model.addAttribute("priorityList", Arrays.asList(prioritys));
         return "/log/index";
     }
 

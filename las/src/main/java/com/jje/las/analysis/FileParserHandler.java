@@ -32,17 +32,17 @@ public class FileParserHandler {
 
     public void handleLogFile(MonitFile mfile, IAction action) {
         try {
-            parser(mfile.getRealFile(), mfile.getFileName());
+            parser(mfile.getRealFile(), mfile.getFileName(), mfile.getEncoding());
         } catch (Exception e) {
             logger.error("Parse exception:", e);
         }
         action.perform(mfile);
     }
 
-    protected void parser(File file, String from) throws Exception {
+    protected void parser(File file, String from, String encoding) throws Exception {
         Log last = null;
         LasContext context = new LasContext();
-        LineIterator it = FileUtils.lineIterator(file, "UTF-8");
+        LineIterator it = FileUtils.lineIterator(file, encoding);
         try {
             while (it.hasNext()) {
                 context.setCurrentLine(it.nextLine()).setLastLog(last).setFileFrom(from);
