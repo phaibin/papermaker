@@ -18,6 +18,7 @@ public abstract class LasBaseSpringTest {
         setTestClassPathtoLasHome();
     }
 
+    @SuppressWarnings("unused")
     private static void setSrcClassPathtoLasHome() {
         String classFile = "log4j.properties";
         URL url = LasBaseSpringTest.class.getClassLoader().getResource(classFile);

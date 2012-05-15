@@ -21,17 +21,17 @@ import java.util.Map;
 public class SafeSimpleDateFormat {
     private final String _format;
     private Locale _locale = null;
-    private static final ThreadLocal _dateFormats = new ThreadLocal()
+    private static final ThreadLocal<Map<String, SimpleDateFormat>> _dateFormats = new ThreadLocal<Map<String, SimpleDateFormat>>()
     {
-        public Object initialValue()
+        public HashMap<String, SimpleDateFormat> initialValue()
         {
-            return new HashMap();
+            return new HashMap<String, SimpleDateFormat>();
         }
     };
 
     private SimpleDateFormat getDateFormat(String format)
     {
-        Map<String, SimpleDateFormat> formatters = (Map)_dateFormats.get();
+        Map<String, SimpleDateFormat> formatters = _dateFormats.get();
         SimpleDateFormat formatter = formatters.get(format);
         if (formatter == null)
         {

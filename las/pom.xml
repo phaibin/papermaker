@@ -190,13 +190,29 @@
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<executions>
+					<execution>
+						<id>start-mongo-embed</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>com.jje.las.it.service.EmbedMongoStarter</mainClass>
+							<classpathScope>test</classpathScope>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<version>1.5</version>
 				<executions>
 					<execution>
 						<id>add-test-source</id>
-						<!-- This will help m2eclipse to recognize the folder as source folder 
-							after update project configuration. -->
 						<phase>process-resources</phase>
 						<!-- <phase>generate-test-sources</phase> -->
 						<goals>
@@ -221,9 +237,9 @@
 							<goal>integration-test</goal>
 						</goals>
 						<configuration>
-						  <includes>
-						      <include>**/*ITest.java</include>
-						  </includes>
+							<includes>
+								<include>**/*ITest.java</include>
+							</includes>
 						</configuration>
 					</execution>
 				</executions>
@@ -373,6 +389,10 @@
 						<configuration>
 							<url>http://192.168.2.160:8080/manager/html</url>
 							<update>true</update>
+							<!-- 
+							add server config in maven setting.xml
+							<server> <id>tomcat7070</id> <username>tomcat</username> <password>tomcat</password>	</server> 
+							<server> <id>mongoApp</id> <username>tomcat</username> <password>tomcat</password>	</server> -->
 							<server>mongoApp</server>
 						</configuration>
 					</plugin>
