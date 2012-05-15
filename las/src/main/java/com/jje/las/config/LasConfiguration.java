@@ -21,7 +21,7 @@ public class LasConfiguration {
 
     int interval=3;
     
-    private String priority = "error,info,debug,other";
+    private String priority = "error,warn,info,debug,access,other";
 
     List<MonitFile> scanPaths = new ArrayList<MonitFile>();
     

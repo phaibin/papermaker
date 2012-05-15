@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jje.las.config.LasConfiguration;
 import com.jje.las.config.MongoConfiguration;
 import com.jje.las.domain.MongoLasAdminObject;
 import com.jje.las.domain.MonitFile;
@@ -58,5 +59,13 @@ public class AdminService {
         DB db = handler.getConnection().getDB(conf.getSchema()+"_config");
         DBCollection conn = db.getCollection(conf.getConfigTable());
         return conn;
+    }
+    
+    public void save(LasConfiguration las){
+        
+    }
+    
+    public void loadTo(LasConfiguration las){
+        
     }
 }

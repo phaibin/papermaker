@@ -51,7 +51,7 @@ public class LasConfigurationTest {
         LasConfiguration lc = new LasConfiguration();
         String[] prioritys = lc.getPrioritys();
         Assert.assertEquals("error", prioritys[0]);
-        Assert.assertEquals(4, prioritys.length);
+        Assert.assertEquals(6, prioritys.length);
         lc.setPriority("a,b,c");
         prioritys = lc.getPrioritys();
         Assert.assertEquals("c", prioritys[2]);

@@ -188,7 +188,46 @@
 
 	<build>
 		<plugins>
-
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>add-test-source</id>
+						<!-- This will help m2eclipse to recognize the folder as source folder 
+							after update project configuration. -->
+						<phase>process-resources</phase>
+						<!-- <phase>generate-test-sources</phase> -->
+						<goals>
+							<goal>add-test-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/it/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.8</version>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+						<configuration>
+						  <includes>
+						      <include>**/*ITest.java</include>
+						  </includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -206,6 +245,9 @@
 					<systemPropertyVariables>
 						<las_home>${basedir}/src/main/resources/</las_home>
 					</systemPropertyVariables>
+					<excludes>
+						<exclude>**/*ITest.java</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -272,6 +314,26 @@
 						</connector>
 					</connectors>
 				</configuration>
+				<executions>
+					<execution>
+						<id>start-jetty</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<scanIntervalSeconds>0</scanIntervalSeconds>
+							<daemon>true</daemon>
+						</configuration>
+					</execution>
+					<execution>
+						<id>stop-jetty</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -301,21 +363,21 @@
 			</build>
 		</profile>
 		<profile>
-            <id>deploy</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.tomcat.maven</groupId>
-                        <artifactId>tomcat7-maven-plugin</artifactId>
-                        <version>2.0-beta-1</version>
-                        <configuration>
-                            <url>http://192.168.2.160:8080/manager/html</url>
-                            <update>true</update>
-                            <server>mongoApp</server>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+			<id>deploy</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.tomcat.maven</groupId>
+						<artifactId>tomcat7-maven-plugin</artifactId>
+						<version>2.0-beta-1</version>
+						<configuration>
+							<url>http://192.168.2.160:8080/manager/html</url>
+							<update>true</update>
+							<server>mongoApp</server>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 </project>

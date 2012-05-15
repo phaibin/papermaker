@@ -64,10 +64,13 @@ public class LogScanner extends TimerTask{
                 for (final MonitFile log : convertList) {
                     threadPool.submit(new Runnable() {
                         public void run() {
-                            logger.debug("perform log file name:" + log.getPath());
+                            if(logger.isDebugEnabled())
+                                logger.debug("perform log file name:" + log.getPath());
                             parser.handleLogFile(log, new IAction() {
                                 public void perform(MonitFile mfile) {
-                                    mfile.getRealFile().delete();
+                                    boolean deleteQuietly = FileUtils.deleteQuietly(mfile.getRealFile());
+                                    if(logger.isDebugEnabled())
+                                        logger.debug("Delete file "+mfile.getFileName() + " " + deleteQuietly);
                                 }
                             });
                             latch.countDown();
