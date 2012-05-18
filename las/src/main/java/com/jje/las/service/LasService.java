@@ -91,6 +91,7 @@ public class LasService {
     }
 
     private void valid(Date from, Date to, String priority, String module) {
+        logger.debug("validate data:"+priority+":"+module+":"+from+":"+to);
         if (priority == null || module == null || from == null || to == null) {
             throw new IllegalArgumentException("Priority & module & from/to must not be null in Query.");
         }

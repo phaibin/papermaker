@@ -27,6 +27,7 @@
 		<commons.chain.version>1.2</commons.chain.version>
 		<commons.io.version>2.1</commons.io.version>
 		<javax.mail.version>1.4.5</javax.mail.version>
+		<jackson.version>1.5.5</jackson.version>
 		<las_home>${basedir}/src/main/resources/</las_home>
 	</properties>
 
@@ -146,6 +147,16 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
 		<!-- test -->
 		<dependency>
@@ -321,6 +332,7 @@
 					</systemProperties>
 					<contextPath>/</contextPath>
 					<scanIntervalSeconds>2</scanIntervalSeconds>
+					<webDefaultXml>src/main/resources/webdefault.xml</webDefaultXml>
 					<stopKey>las</stopKey>
 					<stopPort>${jje.module.stopPort}</stopPort>
 					<connectors>
@@ -389,10 +401,10 @@
 						<configuration>
 							<url>http://192.168.2.160:8080/manager/html</url>
 							<update>true</update>
-							<!-- 
-							add server config in maven setting.xml
-							<server> <id>tomcat7070</id> <username>tomcat</username> <password>tomcat</password>	</server> 
-							<server> <id>mongoApp</id> <username>tomcat</username> <password>tomcat</password>	</server> -->
+							<!-- add server config in maven setting.xml <server> <id>tomcat7070</id> 
+								<username>tomcat</username> <password>tomcat</password> </server> <server> 
+								<id>mongoApp</id> <username>tomcat</username> <password>tomcat</password> 
+								</server> -->
 							<server>mongoApp</server>
 						</configuration>
 					</plugin>

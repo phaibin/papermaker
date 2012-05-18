@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.jje.las.util.SafeSimpleDateFormat;
+
 public class LogQueryForm {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -16,6 +18,22 @@ public class LogQueryForm {
 
     private int page = 1;
     private int pageSize = 50;
+
+    SafeSimpleDateFormat ssdf = new SafeSimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    public String getBeginStr() {
+        if (getBegin() == null) {
+            return "";
+        }
+        return ssdf.format(getBegin());
+    }
+
+    public String getEndStr() {
+        if (getEnd() == null) {
+            return "";
+        }
+        return ssdf.format(getEnd());
+    }
 
     public String getModule() {
         return module;

@@ -1,5 +1,6 @@
 package com.jje.las.action.log;
 
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.util.UriUtils;
 
 import com.jje.las.config.LasConfiguration;
 import com.jje.las.domain.Log;
@@ -50,6 +52,7 @@ public class IndexController {
         model.addAttribute("logs", r.getList());
         model.addAttribute("totalPage", r.getTotalPage());
         model.addAttribute("priorityList", Arrays.asList(prioritys));
+        setNextPage(form, model, r);
         return "/log/index";
     }
 
@@ -60,7 +63,37 @@ public class IndexController {
         model.addAttribute("logs", r.getList());
         model.addAttribute("totalPage", r.getTotalPage());
         model.addAttribute("priorityList", Arrays.asList(prioritys));
+        setNextPage(form, model, r);
         return "/log/index";
+    }
+
+    @RequestMapping(value = "/queryData")
+    public String queryData(LogQueryForm form, Model model) {
+        LogQueryResult r = l.query(form.getBegin(), form.getEnd(), form.getPriority(), form.getModule(), form.getPage(), form.getPageSize());
+        model.addAttribute("logs", r.getList());
+        setNextPage(form, model, r);
+        return "/log/queryData";
+    }
+
+    private void setNextPage(LogQueryForm form, Model model, LogQueryResult r)  {
+        String nextPageStr = "/endPage";
+        int nextPage = r.getCurrentPage()+1;
+        if(nextPage<=r.getTotalPage())
+        {
+            String a = "page="+nextPage+"&pageSize="+form.getPageSize()+"&begin="+form.getBeginStr()+"&end="+form.getEndStr()+"&priority="+form.getPriority()+"&module="+form.getModule();
+            try {
+                a = UriUtils.encodeQuery(a, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            nextPageStr = "/queryData?"+a;
+        }
+        model.addAttribute("nextPage", nextPageStr);
+    }
+    
+    @RequestMapping(value="/endPage")
+    public void endPage(Model model){
+        
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/log/{id}")

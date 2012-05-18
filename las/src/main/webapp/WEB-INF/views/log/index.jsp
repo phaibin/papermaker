@@ -14,54 +14,19 @@
 <!--[if lt IE 8]>
     <link rel="stylesheet" href="<c:url value='css/blueprint/ie.css'/>" type="text/css" media="screen, projection">
   <![endif]-->
-<script type="text/javascript">
-	function pageCommit(oper) {
-		var currentPage = document.getElementById("page").value;
-		currentPage = ("add" == oper) ? ++currentPage : --currentPage;
-		document.getElementById("page").value = currentPage;
-		document.forms[0].submit();
-	}
-	function isDateTime(dateTime) {
-
-		var reg = /^(\d{4})(-|\/)(\d{2})\2(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
-		var r = dateTime.match(reg);
-		if (r == null)
-			return false;
-		var d = new Date(r[1], r[3] - 1, r[4], r[5], r[6], r[7]);
-		return (d.getFullYear() == r[1] && (d.getMonth() + 1) == r[3]
-				&& d.getDate() == r[4] && d.getHours() == r[5]
-				&& d.getMinutes() == r[6] && d.getSeconds() == r[7]);
-	}
-
-	function doSubmit() {
-		document.getElementById("page").value = 1;
-		var begin = document.getElementById("begin").value;
-		var end = document.getElementById("end").value;
-		if (null != begin && "" != begin) {
-			if (!isDateTime(begin)) {
-				alert("开始日期格式错误；格式为2012-01-30 11:37:14");
-				return false;
-			}
-		}
-		if (null != end && "" != end) {
-			if (!isDateTime(end)) {
-				alert("结束日期格式错误；格式为2012-01-30 12:37:14");
-				return false;
-			}
-		}
-		return true;
-	}
-</script>
+<link rel="stylesheet" href="<c:url value='/css/ulTable.css'/>" type="text/css" media="screen, projection">
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery.infinitescroll.min.js'/>"></script>
 
 </head>
 <body>
+<div class="wrap">
 	<div>
 		<a href="<c:url value="/admin/index"/>" style="left: 10px;">监控日志管理</a>
 	</div>
 	<div>日志查询</div>
 	<c:url value="/query" var="logQueryFormQueryAction" />
-	<form:form modelAttribute="logQueryForm" id="LogQueryForm"
-		action="${logQueryFormQueryAction }" method="POST">
+	<form:form modelAttribute="logQueryForm" id="LogQueryForm" action="${logQueryFormQueryAction }" method="POST">
 		<form:hidden path="page" />
             开始日期：<form:input path="begin" />
             结束日期：<form:input path="end" />
@@ -72,41 +37,51 @@
 			</c:forEach>
 		</form:select>
             系统：<form:input path="module" />
-		<input type="submit" value="查询" onclick="return doSubmit()" />
+		<input type="submit" value="查询" />
 	</form:form>
 
-	<table border=1 cellspacing=0 width=100% bordercolorlight=#333333
-		bordercolordark=#efefef top=100px>
-		<th>时间</th>
-		<th>日志级别</th>
-		<th>系统</th>
-		<th>来源</th>
-		<th>分类</th>
-		<th>信息</th>
-		<th colspan="2">操作</th>
+	<div id="content">
+		<ul class="menu">
+			<li>时间</li>
+	        <li>日志级别</li>
+	        <li>系统</li>
+	        <li>来源</li>
+	        <li>分类</li>
+	        <li>信息</li>
+			<li>操作</li>
+		</ul>
 		<c:forEach var="logItem" items="${logs}" varStatus="status">
-			<tr>
-				<td style="width: 180px"><fmt:formatDate
-						value="${logItem.logTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
-				<td style="width: 100px">${logItem.priority}</td>
-				<td style="width: 100px">${logItem.module}</td>
-				<td style="width: 150px">${logItem.logFrom}</td>
-				<td style="width: 230px">${logItem.className}</td>
-				<td>${fn:substring(logItem.message, 0, 150)}</td>
-				<td style="width: 90px;"><a
-					href="<c:url value="/log/${logItem.id}?date=${logItem.logTime }&priority=${logItem.priority }"/>">查看详情</a></td>
-				<td style="width: 130px;"><a
-					href="<c:url value="/associate/${logItem.id}?date=${logItem.logTime }&priority=${logItem.priority }"/>">时间关联日志</a></td>
-			</tr>
+		<ul class="menu">
+		  <li><fmt:formatDate value="${logItem.logTime}" pattern="yyyy-MM-dd HH:mm:ss" /></li>
+		  <li>${logItem.priority}</li>
+		  <li>${logItem.module}</li>
+		  <li>${logItem.logFrom}</li>
+		  <li>${logItem.className}</li>
+		  <li>${fn:substring(logItem.message, 0, 150)}</li>
+		  <li><a href="<c:url value="/log/${logItem.id}?date=${logItem.logTime }&priority=${logItem.priority }"/>">查看详情</a></li>
+		  <li><a href="<c:url value="/associate/${logItem.id}?date=${logItem.logTime }&priority=${logItem.priority }"/>">时间关联日志</a></li>
+		</ul>
 		</c:forEach>
-	</table>
-	<br>
-	<br>
-	<div style="float: right;">
-		<span>共有页面${totalPage}</span> <span>|当前页面${logQueryForm.page}|</span>
-		<span><a href="javascript:pageCommit('r')">上一页</a></span> <span><a
-			href="javascript:pageCommit('add')">下一页</a></span>
-
+        <a id="next" href="<c:url value='${nextPage}'/>">next page?</a>
 	</div>
+</div>
+	<script type="text/javascript">
+		function pageCommit(oper) {
+			var currentPage = $('#page').val();//document.getElementById("page").value;
+			currentPage = ("add" == oper) ? ++currentPage : --currentPage;
+			$('#page').val(currentPage)//document.getElementById("page").value = currentPage;
+			document.forms[0].submit();
+		}
+		
+		  $('#content').infinitescroll({
+		        navSelector     : "a#next:last",
+		        nextSelector    : "a#next:last",
+		        itemSelector    : "#content ul",
+		        debug           : true,
+		        dataType        : 'html',
+		    }, function(newElements){
+		    });
+
+	</script>
 </body>
 </html>
