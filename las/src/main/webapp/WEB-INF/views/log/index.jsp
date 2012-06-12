@@ -66,12 +66,6 @@
 	</div>
 </div>
 	<script type="text/javascript">
-		function pageCommit(oper) {
-			var currentPage = $('#page').val();//document.getElementById("page").value;
-			currentPage = ("add" == oper) ? ++currentPage : --currentPage;
-			$('#page').val(currentPage)//document.getElementById("page").value = currentPage;
-			document.forms[0].submit();
-		}
 		
 		  $('#content').infinitescroll({
 		        navSelector     : "a#next:last",
