@@ -27,7 +27,18 @@ class TestStr(unittest.TestCase):
         self.assertEqual('82', match[0])
         self.assertEqual('5', match[1])
         self.assertEqual('17', match[2])
-        
+
+    def test_parse_str_2(self):
+        string = '/CityInnHotel/jChainHotelInfo----0783---3100---2012-06-13---2012-06-14.html'
+        match = re.findall('\d+', string)
+        self.assertTrue(match)
+        self.assertEqual('0783', match[0])
+
+    def test_parse_str_3(self):
+        string = "javascript:resv('0783','0001')"
+        match = re.findall('\d+', string)
+        self.assertTrue(match)
+        self.assertEqual('0783', match[0])
 
 
 class TestBs4(unittest.TestCase):
