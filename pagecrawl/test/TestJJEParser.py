@@ -13,7 +13,6 @@ class TestJJEExtract(unittest.TestCase):
         soup = BeautifulSoup(content)
         self.soup = soup
         self.hotels = JJEHotels('上海')
-        print 'set up jje extract testcase.'
         
     def test_extract_page(self):
         (total, pages) = self.hotels.extractPages(self.soup)

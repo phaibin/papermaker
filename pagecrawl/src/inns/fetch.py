@@ -17,11 +17,7 @@ class Hotels:
         
 
     def extractPages(self, soup):
-        pageSys = soup.find('div', attrs={'class':'pageSys'})
-        pageSys.div.decompose()
-        pageSys.span.decompose()
-        pageSys.a.decompose()
-        text = pageSys.getText()
+        text = soup.find('div', attrs={'class':'pageSys'}).getText()
         match = re.findall('\d+', text)
         return (int(match[0]), int(match[2]))
    
@@ -32,39 +28,27 @@ class Hotels:
     
     def extractHotels(self, soup):
         result = []
-        find_all = soup.find_all('table', attrs={'class':'mlist'})
-        for t in find_all:
-            dict = {}
+        for t in soup.find_all('table', attrs={'class':'mlist'}):
             a_tag = t.tr.td.a
             innName = a_tag.getText()
-            dict['name'] = innName
-            link = a_tag['href']
+            link = a_tag.get('href')
             match = re.findall('\d+', link)
-            dict['id'] = match[0]
-            result.append(dict)
+            result.append({'id':match[0], 'name':innName})
         return result
     
     def extractPrices(self, soup):
         result = []
-        find_all = soup.find_all('table', attrs={'class':'tbXing'})
-        for t in find_all:
-            if t.table:
-                continue
+        for t in [t for t in soup.find_all('table', attrs={'class':'tbXing'}) if not t.table]:
             t.tr.decompose()
-            dict = {}
-            for tr in list(t.children):
-                if isinstance(tr, bs4.element.Tag):
+            room = {}
+            for tr in [tr for tr in list(t.children) if isinstance(tr, bs4.element.Tag)]:
                     tr_tag = list(tr.children)
-                    td0 = tr_tag[0]
-                    td3 = tr_tag[3]
-                    dict[td0.a.getText()] = int(td3.getText())
-                    if not dict.get('id'):
-                        input_tag = tr_tag[4].input
-                        onclikStr = input_tag.get('onclick')
-                        if onclikStr:
-                            match = re.findall('\d+', onclikStr)
-                            dict['id'] = match[0]
-            result.append(dict)
+                    room[tr_tag[0].a.getText()] = int(tr_tag[3].getText())
+                    if not room.get('id'):
+                        if tr_tag[4].input.get('onclick'):
+                            match = re.findall('\d+', tr_tag[4].input.get('onclick'))
+                            room['id'] = match[0]
+            result.append(room)
         return result
                         
     def extractAndStore(self):

@@ -12,7 +12,6 @@ class TestInnsExtract(unittest.TestCase):
         soup = BeautifulSoup(content)
         self.soup = soup
         self.hotels = InnsHotels('3100')
-        print 'set up jje extract testcase.'
 
     def test_extract_page(self):
         (total, pages) = self.hotels.extractPages(self.soup)

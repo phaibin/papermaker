@@ -32,10 +32,7 @@ class Hotels:
         decode = json.load(StringIO(find.getText()))
         hotels = []
         for item in decode:
-            dict = {}
-            dict['id'] = item['id']
-            dict['name'] = item['name']
-            hotels.append(dict)
+            hotels.append({'id':item['id'], 'name':item['name']})
         return hotels
     
     def extractPrices(self, soup):
@@ -44,8 +41,7 @@ class Hotels:
         decode = json.load(StringIO(find.getText()))
         result = decode['result']
         for id, value in result.items():
-            dict = {}
-            dict['id'] = id
+            dict = {'id':id }
             for item in value:
                 dict[item['roomName']] = item['minAveragePrice'] 
             prices.append(dict)
