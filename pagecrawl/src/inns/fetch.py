@@ -22,10 +22,6 @@ class Hotels:
         return (int(match[0]), int(match[2]))
    
     
-    def store(self, chunk):
-        pass
-    
-    
     def extractHotels(self, soup):
         result = []
         for t in soup.find_all('table', attrs={'class':'mlist'}):
@@ -38,27 +34,42 @@ class Hotels:
     
     def extractPrices(self, soup):
         result = []
-        for t in [t for t in soup.find_all('table', attrs={'class':'tbXing'}) if not t.table]:
-            t.tr.decompose()
+        tbxing = [x for x in soup.find_all('table', attrs={'class':'tbFang'}) ]
+        for t in tbxing:
+            t = t.findNextSibling('table', attrs={'class':'tbXing'})
             room = {}
-            for tr in [tr for tr in list(t.children) if isinstance(tr, bs4.element.Tag)]:
-                    tr_tag = list(tr.children)
-                    room[tr_tag[0].a.getText()] = int(tr_tag[3].getText())
-                    if not room.get('id'):
-                        if tr_tag[4].input.get('onclick'):
-                            match = re.findall('\d+', tr_tag[4].input.get('onclick'))
-                            room['id'] = match[0]
+            try :
+                t = t.table
+                t.tr.decompose()
+                for tr in [tr for tr in list(t.children) if isinstance(tr, bs4.element.Tag)]:
+                        td_tag = list(tr.children)
+                        room[td_tag[0].a.getText()] = int(td_tag[3].getText())
+                        if not room.get('id'):
+                            if td_tag[4].input.get('onclick'):
+                                match = re.findall('\d+', td_tag[4].input.get('onclick'))
+                                room['id'] = match[0]
+            except:
+                print 'error get'
             result.append(room)
         return result
                         
-    def extractAndStore(self):
+    def extract(self):
         print self.city, self.checkinDate, self.checkoutDate
-        url = 'http://www.jinjianginns.com/resv/resv1----'+self.city+'------'+str(self.checkinDate)+'---'+str(self.checkoutDate)+'----00-----1.html'
+        (soup, hotels, prices) = self.fetchPage(self.makeUrl(1))
+        hp = [dict(x.items()+y.items()) for (x,y) in zip(hotels, prices)]
+        (totals, pages) = self.extractPages(soup)
+        for j in [i for i in range(2, pages+1) if pages>1]:
+            (soup, hotels, prices) = self.fetchPage(self.makeUrl(j))
+            hp.extend([dict(x.items()+y.items()) for (x,y) in zip(hotels, prices)])
+        print totals
+        return hp
+
+    def makeUrl(self, page):
+        return 'http://www.jinjianginns.com/resv/resv1----'+self.city+'------'+str(self.checkinDate)+'---'+str(self.checkoutDate)+'----00-----'+str(page)+'.html'
+    
+    def fetchPage(self, url):
+        print url
         opener = urllib2.build_opener();
         chunk = opener.open(url).read()
-        self.store(chunk)
         soup = BeautifulSoup(chunk)
-        (totals, pages) = self.extractPages(soup)
-        hotels = self.extractHotels(soup)
-        prices = self.extractPrices(soup)
-        print totals, pages, hotels, prices
+        return (soup, self.extractHotels(soup), self.extractPrices(soup))
