@@ -14,8 +14,10 @@ class TestOs(unittest.TestCase):
     
     def test_loop(self):
         pages = 3
+        t = 0
         for j in [i for i in range(2, pages+1) if pages>1]:
-            print j
+            t += 1
+        self.assertEqual(2, t)
             
         
         

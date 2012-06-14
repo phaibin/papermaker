@@ -16,7 +16,6 @@ class TestDateTime(unittest.TestCase):
         today = datetime.date.today()
         td = datetime.timedelta(days=1)
         tomorrow = today + td
-        print today, tomorrow
         
 class TestStr(unittest.TestCase):
     def test_parse_str(self):
