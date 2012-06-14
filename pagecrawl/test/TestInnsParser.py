@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 import unittest
 from bs4 import BeautifulSoup
-from inns.fetch import Hotels as InnsHotels
+from fetch import INNS as InnsHotels
 
 class TestInnsExtract(unittest.TestCase):
     def setUp(self):

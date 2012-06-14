@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 import unittest
 from bs4 import BeautifulSoup
-from jje.fetch import Hotels as JJEHotels
+from fetch import JJE as JJEHotels
 
 class TestJJEExtract(unittest.TestCase):
     
