@@ -5,6 +5,7 @@ target
 *.ipr
 *.swp
 *.bak
+*.pyc
 nb*.xml
 .classpath
 .project

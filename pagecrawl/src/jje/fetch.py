@@ -23,35 +23,35 @@ class Hotels:
         total = list(find.children)[-3].getText()
         return (int(total), int(pages))
     
-    def store(self, chunk):
-        pass
-    
-    
     def extractHotels(self, soup):
-        find = soup.find('textarea', attrs={'id':'hotelMapInfo'})
-        decode = json.load(StringIO(find.getText()))
-        hotels = []
-        for item in decode:
-            hotels.append({'id':item['id'], 'name':item['name']})
-        return hotels
+        return [{'id':item['id'], 'name':item['name']} for item in json.load(StringIO(soup.find('textarea', attrs={'id':'hotelMapInfo'}).getText()))]
     
     def extractPrices(self, soup):
         prices = []
-        find = soup.find('textarea', attrs={'id':'hotelRoomInfo'})
-        decode = json.load(StringIO(find.getText()))
-        result = decode['result']
-        for id, value in result.items():
-            dict = {'id':id }
+        result = json.load(StringIO(soup.find('textarea', attrs={'id':'hotelRoomInfo'}).getText())).get('result')
+        for idkey, value in result.items():
+            p = {'id':idkey }
             for item in value:
-                dict[item['roomName']] = item['minAveragePrice'] 
-            prices.append(dict)
+                p[item['roomName']] = item['minAveragePrice'] 
+            prices.append(p)
         return prices
                         
-    def extractAndStore(self):
-        print self.city, self.checkinDate, self.checkoutDate
-        url = 'http://www.jinjiang.com/hotel/query?hotelTypes=&brands=JJINN&checkinDate=2012-06-14&checkoutDate=2012-06-15&cityName=上海&queryWords=&roomCount=1&pagination.page=1'
+    def makeUrl(self, page):
+        return 'http://www.jinjiang.com/hotel/query?hotelTypes=&brands=JJINN&checkinDate='+str(self.checkinDate)+'&checkoutDate='+str(self.checkoutDate)+'&cityName='+self.city+'&queryWords=&roomCount=1&pagination.page='+str(page)
+
+    def extract(self):
+        (soup, hotels, prices) = self.fetchPage(self.makeUrl(1))
+        hp = [dict(x.items()+y.items()) for (x,y) in zip(hotels, prices)]
+        (totals, pages) = self.extractPages(soup)
+        for j in [i for i in range(2, pages+1) if pages>1]:
+            (soup, hotels, prices) = self.fetchPage(self.makeUrl(j))
+            hp.extend([dict(x.items()+y.items()) for (x,y) in zip(hotels, prices)])
+        return hp, totals
+
+    def fetchPage(self, url):
+        print url
         opener = urllib2.build_opener();
         chunk = opener.open(url).read()
-        self.store(chunk)
         soup = BeautifulSoup(chunk)
+        return (soup, self.extractHotels(soup), self.extractPrices(soup))
 

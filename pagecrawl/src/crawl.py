@@ -6,7 +6,9 @@ from jje.fetch import Hotels as JJEHotels
 
 city = '1100'
 ih = InnsHotels(city)
-hp = ih.extract()
+hp, totals = ih.extract()
+print totals
 
-#jh = JJEHotels('上海')
-#jh.extractAndStore()
+jh = JJEHotels('北京')
+hp, totals = jh.extract()
+print totals

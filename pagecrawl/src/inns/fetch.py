@@ -53,20 +53,18 @@ class Hotels:
             result.append(room)
         return result
                         
+    def makeUrl(self, page):
+        return 'http://www.jinjianginns.com/resv/resv1----'+self.city+'------'+str(self.checkinDate)+'---'+str(self.checkoutDate)+'----00-----'+str(page)+'.html'
+    
     def extract(self):
-        print self.city, self.checkinDate, self.checkoutDate
         (soup, hotels, prices) = self.fetchPage(self.makeUrl(1))
         hp = [dict(x.items()+y.items()) for (x,y) in zip(hotels, prices)]
         (totals, pages) = self.extractPages(soup)
         for j in [i for i in range(2, pages+1) if pages>1]:
             (soup, hotels, prices) = self.fetchPage(self.makeUrl(j))
             hp.extend([dict(x.items()+y.items()) for (x,y) in zip(hotels, prices)])
-        print totals
-        return hp
+        return hp, totals
 
-    def makeUrl(self, page):
-        return 'http://www.jinjianginns.com/resv/resv1----'+self.city+'------'+str(self.checkinDate)+'---'+str(self.checkoutDate)+'----00-----'+str(page)+'.html'
-    
     def fetchPage(self, url):
         print url
         opener = urllib2.build_opener();
