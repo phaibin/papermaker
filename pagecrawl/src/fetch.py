@@ -25,16 +25,12 @@ class Page:
         return hp, totals
 
     def fetchPage(self, url):
-        print url
-        opener = urllib2.build_opener();
-        chunk = opener.open(url).read()
-        soup = BeautifulSoup(chunk)
+        soup = BeautifulSoup(urllib2.build_opener().open(url).read())
         return (soup, self.extractHotels(soup), self.extractPrices(soup))
 
 class INNS(Page):
     def extractPages(self, soup):
-        text = soup.find('div', attrs={'class':'pageSys'}).getText()
-        match = re.findall('\d+', text)
+        match = re.findall('\d+', soup.find('div', attrs={'class':'pageSys'}).getText())
         return (int(match[0]), int(match[2]))
    
     
@@ -65,7 +61,8 @@ class INNS(Page):
                                 match = re.findall('\d+', td_tag[4].input.get('onclick'))
                                 room['id'] = match[0]
             except:
-                print 'error get'
+                pass
+#               print 'error get'
             result.append(room)
         return result
                         
