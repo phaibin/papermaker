@@ -1,15 +1,15 @@
 $def with(diffDatas)
-$:render.header()
+$:render.notFoundHotelHead()
 
         <div class="box">
-
+	
             <div class="box todos">
-               $for cityData in diffDatas:
-                <ul>
-                	$for hotelData in cityData:
-                		$for name, value in hotelData.items():
-                        	<li>$name, $value</li>
-                </ul>
+               $for city, cityData in diffDatas.items():
+               		<div>$cityDicts[city]</div>
+	                <ul>
+	                	$for hdd in [hotelData for hotelData in cityData if hotelData[hotelData['name']] == 'notFound']:
+	                        	<li>&nbsp;&nbsp;&nbsp;&nbsp;$hdd['name']</li>
+	                </ul>
             </div>
 
         </div>

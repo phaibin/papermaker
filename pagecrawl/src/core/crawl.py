@@ -76,18 +76,22 @@ def getAllDiff(root, date):
     path = os.sep.join([root, date, 'diff'])
     if not os.path.isdir(path):
         raise Exception('not found')
-    results = []
+    cityDatas = {}
     for file in os.listdir(path):
-        print file
         f = open(path+os.sep+file, 'r')
         city = json.load(f)
-        results.append(city)
-    return results
+        cityDatas[file[:-4]] = city
+    return cityDatas
         
 diffDatas = getAllDiff('d:/pagedata', '20120619')
-for cityData in diffDatas:
-    for hotelData in cityData:
-        for name, value in hotelData.items():
+for city, cityData in diffDatas.items():
+    print city
+    for hdd in [hotelData for hotelData in cityData if hotelData[hotelData['name']] == 'found']:
+        hddc = [(name,value) for (name, value) in hdd.items() if value != 'match']
+        for name,value in hddc:
+            if name == hdd['name']:
+                continue
             print name , value
+    print '=========='
 #fetchCityPages({'1200':'天津'})
 #fetchCityPages(cityDicts, 'd:')

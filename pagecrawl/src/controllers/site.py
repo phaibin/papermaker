@@ -17,9 +17,9 @@ class DiffView:
     def GET(self, date):
         return render.diff(cc.getAllDiff(settings.data_root, date))
     
-class CityDiffView:
-    def GET(self):
-        return render.index([])
+class DiffDetailView:
+    def GET(self, date):
+        return render.diffDetail(cc.getAllDiff(settings.data_root, date))
     
 class Start:
     def GET(self):

@@ -7,5 +7,5 @@ urls = (
     '/',                    pre_fix + 'site.Index',
     '/start',                    pre_fix + 'site.Start',
     '/date/(\d+)',          pre_fix + 'site.DiffView',
-    '/date/(\d+)/(\w+)',     pre_fix + 'site.CityDiffView'
+    '/diff/(\d+)',     pre_fix + 'site.DiffDetailView'
 )

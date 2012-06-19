@@ -19,3 +19,4 @@ cityDicts = {'1100':'北京', '1200':'天津', '3100':'上海', '4201':'武汉',
 
 web.template.Template.globals['config'] = config
 web.template.Template.globals['render'] = render
+web.template.Template.globals['cityDicts'] = cityDicts
