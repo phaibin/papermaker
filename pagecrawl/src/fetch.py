@@ -30,8 +30,12 @@ class Page:
 
 class INNS(Page):
     def extractPages(self, soup):
-        match = re.findall('\d+', soup.find('div', attrs={'class':'pageSys'}).getText())
-        return (int(match[0]), int(match[2]))
+        try:
+            match = re.findall('\d+', soup.find('div', attrs={'class':'pageSys'}).getText())
+            return (int(match[0]), int(match[2]))
+        except:
+            ts = soup.find_all('table', attrs={'class':'mlist'})
+            return (len(ts), 1)
    
     
     def extractHotels(self, soup):
