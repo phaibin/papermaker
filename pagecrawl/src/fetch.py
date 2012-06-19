@@ -83,7 +83,9 @@ class JJE(Page):
         return (int(total), int(pages))
     
     def extractHotels(self, soup):
-        return [{'id':item['id'], 'name':item['name']} for item in json.load(StringIO(soup.find('textarea', attrs={'id':'hotelMapInfo'}).getText()))]
+        r = [{'id':item['id'], 'name':item['name']} for item in json.load(StringIO(soup.find('textarea', attrs={'id':'hotelMapInfo'}).getText()))]
+        r.sort(key=lambda x : str(x.get('id')))
+        return r
     
     def extractPrices(self, soup):
         prices = []
@@ -93,8 +95,9 @@ class JJE(Page):
             for item in value:
                 p[item['roomName']] = item['minAveragePrice'] 
             prices.append(p)
+        prices.sort(key=lambda x : str(x.get('id')))
         return prices
                         
     def makeUrl(self, page):
-        return 'http://www.jinjiang.com/hotel/query?hotelTypes=&brands=JJINN&checkinDate='+str(self.checkinDate)+'&checkoutDate='+str(self.checkoutDate)+'&cityName='+self.city+'&queryWords=&roomCount=1&pagination.page='+str(page)
+        return 'http://www.jinjiang.com/hotel/query?hotelTypes=&brands=JJINN%2CBESTAY&checkinDate='+str(self.checkinDate)+'&checkoutDate='+str(self.checkoutDate)+'&cityName='+self.city+'&queryWords=&roomCount=1&pagination.page='+str(page)
 

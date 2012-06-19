@@ -10,5 +10,5 @@ nb*.xml
 .classpath
 .project
 .settings
-las.log
+*.log
 .pydevproject
