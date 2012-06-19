@@ -1,0 +1,18 @@
+$def with(dataDirs)
+$:render.header()
+
+        <div class="box">
+
+            <div class="box todos">
+                <ul>
+                    $for dateDir in dataDirs:
+                        <li>
+                            $dateDir
+                            <a href="/date/$dateDir">查看</a>,
+                        </li>
+                </ul>
+            </div>
+
+        </div>
+
+$:render.foot()

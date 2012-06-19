@@ -1,0 +1,17 @@
+$def with(diffDatas)
+$:render.header()
+
+        <div class="box">
+
+            <div class="box todos">
+               $for cityData in diffDatas:
+                <ul>
+                	$for hotelData in cityData:
+                		$for name, value in hotelData.items():
+                        	<li>$name, $value</li>
+                </ul>
+            </div>
+
+        </div>
+
+$:render.foot()
