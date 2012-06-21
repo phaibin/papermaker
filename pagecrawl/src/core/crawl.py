@@ -49,8 +49,8 @@ def save(content, fileName, *pathSep):
     path = os.sep.join(pathSep)
     if not os.path.isdir(path):
         os.makedirs(path)
-    os.chdir(path)
-    f = open(fileName, 'w')
+#    os.chdir(path)
+    f = open(path+os.sep+fileName, 'w')
     json.dump(content, f)
     f.close()
 
@@ -77,21 +77,11 @@ def getAllDiff(root, date):
     if not os.path.isdir(path):
         raise Exception('not found')
     cityDatas = {}
-    for file in os.listdir(path):
-        f = open(path+os.sep+file, 'r')
+    for ft in os.listdir(path):
+        f = open(path+os.sep+ft, 'r')
         city = json.load(f)
-        cityDatas[file[:-4]] = city
+        cityDatas[ft[:-4]] = city
     return cityDatas
         
-diffDatas = getAllDiff('d:/pagedata', '20120619')
-for city, cityData in diffDatas.items():
-    print city
-    for hdd in [hotelData for hotelData in cityData if hotelData[hotelData['name']] == 'found']:
-        hddc = [(name,value) for (name, value) in hdd.items() if value != 'match']
-        for name,value in hddc:
-            if name == hdd['name']:
-                continue
-            print name , value
-    print '=========='
-#fetchCityPages({'1200':'天津'})
+#fetchCityPages({'1200':'天津'},'d:/pagedata')
 #fetchCityPages(cityDicts, 'd:')

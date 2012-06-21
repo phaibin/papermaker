@@ -24,6 +24,6 @@ class DiffDetailView:
 class Start:
     def GET(self):
         cc.fetchCityPages(settings.cityDicts, settings.data_root)
-        return render.index([])    
+        return web.seeother('/')    
 
 

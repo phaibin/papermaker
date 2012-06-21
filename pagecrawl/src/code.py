@@ -1,5 +1,6 @@
-#!/usr/bin/env python
-# coding: utf-8
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
+
 from config.url import urls
 import web
 
