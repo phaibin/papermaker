@@ -49,8 +49,7 @@ def save(content, fileName, *pathSep):
     path = os.sep.join(pathSep)
     if not os.path.isdir(path):
         os.makedirs(path)
-#    os.chdir(path)
-    with open(path+os.sep+fileName, 'w') as f: 
+    with open(os.sep.join([path,fileName]), 'w') as f: 
         json.dump(content, f)
 
 #cityDicts = {'1100':'北京', '1200':'天津', '3100':'上海', '4201':'武汉', '5000':'重庆', '6101':'西安', '4101':'郑州', '3201':'南京', '3202':'无锡', '4401':'广州', '5301':'昆明', '4403':'深圳', '4602':'三亚', '3205':'苏州', '3301':'杭州', '4301':'长沙'}

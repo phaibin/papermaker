@@ -4,7 +4,7 @@
 import unittest
 
 def suite():
-    modules_to_test = ('TestInnsParser', 'TestMergeList', 'TestJJEParser', 'TestPythonFeature') # and so on
+    modules_to_test = ('TestInnsParser', 'TestMergeList', 'TestJJEParser', 'TestPythonFeature', 'TestSaveLoad') # and so on
     alltests = unittest.TestSuite()
     for module in map(__import__, modules_to_test):
         alltests.addTest(unittest.findTestCases(module))
