@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 import unittest
 from bs4 import BeautifulSoup
-from fetch import INNS as InnsHotels
+from core.fetch import INNS as InnsHotels
 
 class TestInnsExtract(unittest.TestCase):
     def setUp(self):
@@ -28,3 +28,6 @@ class TestInnsExtract(unittest.TestCase):
         self.assertEqual(5, len(prices))
         hotelPrice = prices[0]
         self.assertEqual(269, hotelPrice[u'商务房A'])
+
+if __name__=='__main__':
+    unittest.main()
