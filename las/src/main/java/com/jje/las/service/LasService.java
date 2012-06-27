@@ -1,6 +1,5 @@
 package com.jje.las.service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,12 +14,10 @@ import org.springframework.stereotype.Service;
 import com.jje.las.action.admin.LogDelForm;
 import com.jje.las.action.log.LogQueryResult;
 import com.jje.las.config.LasConfiguration;
-import com.jje.las.config.MongoConfiguration;
 import com.jje.las.domain.Log;
 import com.jje.las.domain.MongoLogObject;
 import com.jje.las.handler.MongoHandler;
 import com.mongodb.BasicDBObject;
-import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
@@ -32,44 +29,28 @@ public class LasService {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    MongoConfiguration conf;
-    @Autowired
     LasConfiguration lasConf;
     @Autowired
     MongoHandler handler;
-
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
     public void insert(Log log) {
         if (log == null) {
             return;
         }
-        getDayPriorityDBTable(log.getLogTime(), log.getPriority()).insert(MongoLogObject.get(log));
-    }
-
-    private DBCollection getDayPriorityDBTable(Date d, String priority) {
-        DBCollection db=handler.getCollection(conf.getSchema() + dateFormat.format(d), conf.getDataTable(priority));
-        if(logger.isDebugEnabled()){
-            logger.debug("get day priority db table:"+db.getFullName());
-        }
-        BasicDBObjectBuilder idx = BasicDBObjectBuilder.start();
-        DBObject idxObj = idx.add("logTime", -1).add("priority", 1).add("module", 1).get();
-        db.ensureIndex(idxObj);
-        return db;
+        handler.getDayPriorityDBTable(log.getLogTime(), log.getPriority()).insert(MongoLogObject.get(log));
     }
 
     public LogQueryResult query(Date from, Date to, String priority, String module, int page, int pageSize) {
         valid(from, to, priority, module);
         List<Log> list = new ArrayList<Log>();
-        DBCollection collection = getDayPriorityDBTable(from, priority);
+        DBCollection collection = handler.getDayPriorityDBTable(from, priority);
         QueryBuilder qb = QueryBuilder.start("logTime").greaterThanEquals(from).and("logTime").lessThanEquals(to);
         if(!module.equals("")){
             qb.and("module").is(module);
         }
         DBObject condition = qb.get();
         DBObject sort = QueryBuilder.start("logTime").is(-1).get();
-        logger.info("query object:" + condition);
-        logger.info("sort object:" + sort);
+        logger.info("query object: {} with sort {} " ,condition, sort);
         long count = collection.count(condition);
         DBCursor cursor = null;
         if (page > 1) {
@@ -77,15 +58,17 @@ public class LasService {
         } else {
             cursor = collection.find(condition).sort(sort).limit(pageSize);
         }
-
-        while (cursor.hasNext()) {
-            try {
-                list.add(MongoLogObject.get(cursor.next()));
-            } catch (Exception e) {
-                logger.error("error in query.", e);
-            }
+        try{
+        	while (cursor.hasNext()) {
+        		try {
+        			list.add(MongoLogObject.get(cursor.next()));
+        		} catch (Exception e) {
+        			logger.error("error in query.", e);
+        		}
+        	}
+        }finally{
+        	cursor.close();
         }
-        cursor.close();
         return LogQueryResult.getResult(list, count, page, pageSize);
 
     }
@@ -120,7 +103,7 @@ public class LasService {
         DBObject condition = QueryBuilder.start("logTime").greaterThanEquals(from).and("logTime").lessThanEquals(to)
                 .get();
         DBObject sort = QueryBuilder.start("logTime").is(-1).get();
-        logger.info("query object in associate query:" + condition);
+        logger.info("query object in associate query: {}", condition);
         List<Log> results = new ArrayList<Log>();
         String[] prioritys = lasConf.getPrioritys();
         for(String p : prioritys){
@@ -130,26 +113,25 @@ public class LasService {
     }
 
     private List<Log> query(Log l, String priority, DBObject condition, DBObject sort) {
-        DBCollection collection = getDayPriorityDBTable(l.getLogTime(), priority);
-        DBCursor cursor = collection.find(condition).sort(sort);
-        List<Log> list = new ArrayList<Log>();
-        while (cursor.hasNext()) {
-            try {
-                list.add(MongoLogObject.get(cursor.next()));
-            } catch (Exception e) {
-                logger.error("error in query.", e);
-            }
+    	List<Log> list = new ArrayList<Log>();
+        DBCursor cursor = handler.getDayPriorityDBTable(l.getLogTime(), priority).find(condition).sort(sort);
+        try{
+        	while (cursor.hasNext()) {
+        		try {
+        			list.add(MongoLogObject.get(cursor.next()));
+        		} catch (Exception e) {
+        			logger.error("error in query.", e);
+        		}
+        	}
+        }finally{
+        	cursor.close();
         }
-        cursor.close();
         return list;
     }
 
     public Log detail(String id, Date logTime, String priority) {
         try {
-            DBCollection collection = getDayPriorityDBTable(logTime, priority);
-            BasicDBObject searchQuery = new BasicDBObject();
-            searchQuery.put("_id", new ObjectId(id));
-            return MongoLogObject.get( collection.findOne(searchQuery));
+            return MongoLogObject.get( handler.getDayPriorityDBTable(logTime, priority).findOne(new BasicDBObject("_id", new ObjectId(id))));
         } catch (Exception e) {
             logger.error("error in get ", e);
         }

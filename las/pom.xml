@@ -11,7 +11,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jje.module.port>80</jje.module.port>
+		<jje.module.port>8080</jje.module.port>
 		<jje.module.stopPort>9988</jje.module.stopPort>
 		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
 		<spring.data.mongodb>1.0.1.RELEASE</spring.data.mongodb>
@@ -22,7 +22,7 @@
 		<mockito.version>1.8.1</mockito.version>
 		<cglib.version>2.2</cglib.version>
 		<joda.version>2.0</joda.version>
-		<embedmongo.version>1.10</embedmongo.version>
+		<embedmongo.version>1.11</embedmongo.version>
 		<mongodb.version>2.7.3</mongodb.version>
 		<commons.chain.version>1.2</commons.chain.version>
 		<commons.io.version>2.1</commons.io.version>
@@ -192,11 +192,6 @@
 		</dependency>
 	</dependencies>
 
-	<scm>
-		<connection>scm:git:git@github.com:xuhaixiang/papermaker.git/las</connection>
-		<url>git@github.com:xuhaixiang/papermaker.git/las</url>
-	</scm>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -248,6 +243,9 @@
 							<goal>integration-test</goal>
 						</goals>
 						<configuration>
+							<systemProperties>
+								<logFilePath>${basedir}</logFilePath>
+							</systemProperties>
 							<includes>
 								<include>**/*ITest.java</include>
 							</includes>
@@ -301,19 +299,6 @@
 						</manifestEntries>
 					</archive>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>buildnumber-maven-plugin</artifactId>
-				<version>1.0</version>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>create</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>

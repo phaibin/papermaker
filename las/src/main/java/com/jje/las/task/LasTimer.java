@@ -14,7 +14,7 @@ public class LasTimer {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    LasConfiguration conf;
+    LasConfiguration lasConf;
 
     @Autowired
     AdminService as;
@@ -27,8 +27,7 @@ public class LasTimer {
     public void init(){
         logger.info("Start Las Scanner Timer");
         scannerTimer = new Timer("Las Scanner Timer for auto");
-        LogScanner scanner = new LogScanner(as, parser);
-        scannerTimer.schedule(scanner, 1000, conf.getScanInterval());
+        scannerTimer.schedule(new LogScanner(as, parser, lasConf), 1000, lasConf.getScanInterval());
     }
 
     public void restart() {
@@ -38,8 +37,7 @@ public class LasTimer {
     
     public void manualStart(){
         Timer manualTimer = new Timer("Las Scanner Timer for manual");
-        LogScanner scanner = new LogScanner(as, parser);
-        manualTimer.schedule(scanner, 1000);
+        manualTimer.schedule(new LogScanner(as, parser, lasConf), 1000);
     }
 
     public void destory() {

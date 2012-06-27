@@ -9,13 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jje.las.config.LasConfiguration;
-import com.jje.las.config.MongoConfiguration;
 import com.jje.las.domain.MongoLasAdminObject;
 import com.jje.las.domain.MonitFile;
 import com.jje.las.handler.MongoHandler;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 
 @Service
@@ -25,12 +22,10 @@ public class AdminService {
 
     @Autowired
     MongoHandler handler;
-    @Autowired
-    MongoConfiguration conf;
 
     public List<MonitFile> listMonitorFiles() {
         List<MonitFile> list = new ArrayList<MonitFile>();
-        DBCursor cursor = getMonitorCollection().find();
+        DBCursor cursor = handler.getMonitorCollection().find();
         try {
             while (cursor.hasNext()) {
                 try {
@@ -46,21 +41,15 @@ public class AdminService {
     }
 
     public void removeFileMonitor(String id) {
-        BasicDBObject deleteObject = new BasicDBObject();
-        deleteObject.put("_id", id);
-        getMonitorCollection().remove(deleteObject);
+    	logger.info("remove monitor file");
+        handler.getMonitorCollection().remove(new BasicDBObject("_id", id));
     }
 
     public void addFileToMonitor(MonitFile log) {
-        getMonitorCollection().insert(MongoLasAdminObject.get(log));
+    	logger.info("add monitor file");
+    	handler.getMonitorCollection().insert(MongoLasAdminObject.get(log));
     }
 
-    private DBCollection getMonitorCollection() {
-        DB db = handler.getConnection().getDB(conf.getSchema()+"_config");
-        DBCollection conn = db.getCollection(conf.getConfigTable());
-        return conn;
-    }
-    
     public void save(LasConfiguration las){
         
     }

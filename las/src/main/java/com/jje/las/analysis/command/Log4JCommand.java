@@ -1,23 +1,21 @@
 package com.jje.las.analysis.command;
 
+import java.text.SimpleDateFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.jje.las.domain.Log;
-import com.jje.las.util.SafeSimpleDateFormat;
 
 public class Log4JCommand extends AbstractLasCommand{
     
     String defaultRegex = "(\\d{4}-\\d{2}-\\d{2}) (\\d{2}:\\d{2}:\\d{2},\\d{3}) ([^ ]*) \\[(.*)\\] - (.*)$";
     String dateFormat = "yyyy-MM-dd HH:mm:ss";
 
-    SafeSimpleDateFormat simpleFormat;
     Pattern pattern;
 
     public Log4JCommand() {
         super();
         pattern = Pattern.compile(defaultRegex);
-        simpleFormat = new SafeSimpleDateFormat(dateFormat);
     }
 
     @Override
@@ -37,6 +35,7 @@ public class Log4JCommand extends AbstractLasCommand{
         if (m.matches() && m.groupCount() == 5) {
             String dtStr = m.group(1) + " " + m.group(2);
             try {
+            	SimpleDateFormat simpleFormat = new SimpleDateFormat(dateFormat);
                 newLog.setLogTime(simpleFormat.parse(dtStr));
             } catch (Exception e) {
                 throw e;

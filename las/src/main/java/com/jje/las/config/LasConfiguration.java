@@ -1,10 +1,12 @@
 package com.jje.las.config;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -19,8 +21,12 @@ public class LasConfiguration {
     
     Long scanInterval = 5*60*1000L;
 
-    int interval=3;
-    
+    @Value("${las.associate.interval}")
+    int interval;
+
+    @Value("${las.backup.dir}")
+	private String backupDir;
+
     private String priority = "error,warn,info,debug,access,other";
 
     List<MonitFile> scanPaths = new ArrayList<MonitFile>();
@@ -87,5 +93,24 @@ public class LasConfiguration {
     public String[] getPrioritys(){
         return StringUtils.commaDelimitedListToStringArray(getPriority());
     }
+
+	public File getBackupDirectory() {
+		File f = new File(backupDir);
+		if(f.exists()){
+			return f;
+		}
+		else{
+			System.out.println("Backup directory doesn't exist, use system user.home instead.");
+			return new File(System.getProperty("user.home"));
+		}
+	}
+
+	public String getBackupDir() {
+		return backupDir;
+	}
+
+	public void setBackupDir(String backupDir) {
+		this.backupDir = backupDir;
+	}
     
 }

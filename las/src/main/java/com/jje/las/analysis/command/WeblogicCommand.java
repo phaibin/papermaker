@@ -1,24 +1,22 @@
 package com.jje.las.analysis.command;
 
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.jje.las.domain.Log;
-import com.jje.las.util.SafeSimpleDateFormat;
 
 public class WeblogicCommand extends AbstractLasCommand{
     
     String defaultRegex = "<([^<>]*)> <([^<>]*)> <([^<>]*)> <([^<>]*)> <([^<>]*)>";
     String dateFormat = "MMM dd, yyyy HH:mm:ss aaa z";
 
-    SafeSimpleDateFormat simpleFormat;
     Pattern pattern;
 
     public WeblogicCommand() {
         super();
         pattern = Pattern.compile(defaultRegex);
-        simpleFormat = new SafeSimpleDateFormat(dateFormat, Locale.ENGLISH);
     }
 
     @Override
@@ -28,6 +26,7 @@ public class WeblogicCommand extends AbstractLasCommand{
         Log newLog = context.getNewLog();
         Matcher m = pattern.matcher(line.trim());
         if (m.matches() && m.groupCount() == 5) {
+        	SimpleDateFormat simpleFormat = new SimpleDateFormat(dateFormat, Locale.ENGLISH);
             newLog.setLogTime(simpleFormat.parse(m.group(1) ));
             newLog.setPriority(m.group(2));
             newLog.setModule(m.group(3));

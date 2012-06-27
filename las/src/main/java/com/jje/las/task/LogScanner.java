@@ -1,6 +1,7 @@
 package com.jje.las.task;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,23 +19,30 @@ import org.slf4j.LoggerFactory;
 
 import com.jje.las.analysis.FileParserHandler;
 import com.jje.las.analysis.IAction;
+import com.jje.las.config.LasConfiguration;
 import com.jje.las.domain.MonitFile;
 import com.jje.las.service.AdminService;
 
 public class LogScanner extends TimerTask{
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final class DeleteFileAction implements IAction {
+		public void perform(MonitFile mfile) {
+		    boolean deleteQuietly = FileUtils.deleteQuietly(mfile.getRealFile());
+		    if(logger.isDebugEnabled())
+		        logger.debug("Delete file "+mfile.getFileName() + " " + deleteQuietly);
+		}
+	}
+    
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
     private static final Lock lock = new ReentrantLock();
     AdminService handler;
     FileParserHandler parser;
+    LasConfiguration lasConf;
     
-    public LogScanner(AdminService svc, FileParserHandler hand){
+    public LogScanner(AdminService svc, FileParserHandler hand, LasConfiguration conf){
         handler = svc;
         parser = hand;
-    }
-
-    public void perform() {
-        run();
+        lasConf = conf;
     }
 
     private List<MonitFile> convertList(List<MonitFile> list) {
@@ -58,7 +66,9 @@ public class LogScanner extends TimerTask{
         if (lock.tryLock()) {
             logger.debug("start scanner");
             try {
-                List<MonitFile> convertList = convertList(handler.listMonitorFiles());
+            	List<MonitFile> listMonitorFiles = handler.listMonitorFiles();
+				backup(listMonitorFiles);
+                List<MonitFile> convertList = convertList(listMonitorFiles);
                 final CountDownLatch latch = new CountDownLatch(convertList.size());
                 ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1);
                 for (final MonitFile log : convertList) {
@@ -66,23 +76,25 @@ public class LogScanner extends TimerTask{
                         public void run() {
                             if(logger.isDebugEnabled())
                                 logger.debug("perform log file name:" + log.getPath());
-                            parser.handleLogFile(log, new IAction() {
-                                public void perform(MonitFile mfile) {
-                                    boolean deleteQuietly = FileUtils.deleteQuietly(mfile.getRealFile());
-                                    if(logger.isDebugEnabled())
-                                        logger.debug("Delete file "+mfile.getFileName() + " " + deleteQuietly);
-                                }
-                            });
-                            latch.countDown();
+                            
+                            try {
+								parser.handleLogFile(log, new DeleteFileAction());
+							} catch (Exception e) {
+								logger.error("parser handler log file error", e);
+							}finally{
+								latch.countDown();
+							}
                         }
                     });
                 }
                 try {
-                    latch.await(30, TimeUnit.MINUTES);
+                    latch.await(lasConf.getScanInterval(), TimeUnit.MILLISECONDS);
                 } catch (InterruptedException e) {
                     logger.error("Exceed time limit in scanner log file");
                 }
                 logger.debug("end scanner ");
+            } catch(Throwable t){
+            	logger.error("error in logScanner.", t);
             } finally {
                 lock.unlock();
             }
@@ -90,4 +102,18 @@ public class LogScanner extends TimerTask{
             logger.debug("scanner task is running.");
         }
     }
+
+	private void backup(List<MonitFile> list) {
+ 
+		for (MonitFile log : list) {
+            File f = new File(log.getPath());
+            if (f.exists()){
+                try {
+					FileUtils.copyDirectory(f, lasConf.getBackupDirectory());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+            }
+        }		
+	}
 }
