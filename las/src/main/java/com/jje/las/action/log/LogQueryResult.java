@@ -9,6 +9,7 @@ public class LogQueryResult {
     private List<Log> list;
     private int totalPage;
     private int currentPage;
+    private long total;
 
     public List<Log> getList() {
         return list;
@@ -45,7 +46,16 @@ public class LogQueryResult {
         }
         r.setTotalPage(pz);
         r.setCurrentPage(currentPage);
+        r.setTotal(dataCount);
         return r;
     }
+
+	public long getTotal() {
+		return total;
+	}
+
+	public void setTotal(long total) {
+		this.total = total;
+	}
 
 }

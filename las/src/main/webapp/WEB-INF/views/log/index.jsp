@@ -28,18 +28,18 @@
 	<c:url value="/query" var="logQueryFormQueryAction" />
 	<form:form modelAttribute="logQueryForm" id="LogQueryForm" action="${logQueryFormQueryAction }" method="POST">
 		<form:hidden path="page" />
-            开始日期：<form:input path="begin" />
-            结束日期：<form:input path="end" />
+            开始日期：<form:input path="begin" size="20" />
+            结束日期：<form:input path="end" size="20" />
             日志级别：
             <form:select path="priority">
 			<c:forEach items="${priorityList }" var="item">
 				<form:option value="${item }">${item }</form:option>
 			</c:forEach>
 		</form:select>
-            系统：<form:input path="module" />
+            系统：<form:input path="module" size="5" />
 		<input type="submit" value="查询" />
 	</form:form>
-
+	total records : ${totalRecord} 
 	<div id="content">
 		<ul class="menu">
 			<li>时间</li>
@@ -62,7 +62,11 @@
 		  <li><a href="<c:url value="/associate/${logItem.id}?date=${logItem.logTime }&priority=${logItem.priority }"/>">时间关联日志</a></li>
 		</ul>
 		</c:forEach>
-        <a id="next" href="<c:url value='${nextPage}'/>">next page?</a>
+        		<a id="next" href="<c:url value='${nextPage}'/>">
+		<c:if test='${nextPage}'>
+        		next page?
+		</c:if>
+        		</a>
 	</div>
 </div>
 	<script type="text/javascript">

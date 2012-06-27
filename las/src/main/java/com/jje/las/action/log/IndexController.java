@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.UriUtils;
 
 import com.jje.las.config.LasConfiguration;
@@ -78,7 +79,7 @@ public class IndexController {
     private void setNextPage(LogQueryForm form, Model model, LogQueryResult r)  {
         String nextPageStr = "/endPage";
         int nextPage = r.getCurrentPage()+1;
-        if(nextPage<=r.getTotalPage())
+        if(nextPage <= r.getTotalPage())
         {
             String a = "page="+nextPage+"&pageSize="+form.getPageSize()+"&begin="+form.getBeginStr()+"&end="+form.getEndStr()+"&priority="+form.getPriority()+"&module="+form.getModule();
             try {
@@ -89,11 +90,12 @@ public class IndexController {
             nextPageStr = "/queryData?"+a;
         }
         model.addAttribute("nextPage", nextPageStr);
+        model.addAttribute("totalRecord", r.getTotal());
     }
     
     @RequestMapping(value="/endPage")
-    public void endPage(Model model){
-        
+    public @ResponseBody String endPage(Model model){
+        return "";
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/log/{id}")

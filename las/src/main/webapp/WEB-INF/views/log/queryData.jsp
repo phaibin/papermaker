@@ -38,7 +38,7 @@
           <li><a href="<c:url value="/associate/${logItem.id}?date=${logItem.logTime }&priority=${logItem.priority }"/>">时间关联日志</a></li>
         </ul>
         </c:forEach>
-        <a id="next" href="<c:url value='${nextPage}'/>">next page?</a>
+       	<a id="next" href="<c:url value='${nextPage}'/>">next page?</a>
     </div>
 </body>
 </html>
