@@ -29,12 +29,6 @@ public class MongoHandler {
         return conn;
     }
 
-    public DBCollection getCollection(String schema, String table) {
-        DB db = getConnection().getDB(schema);
-        DBCollection conn = db.getCollection(table);
-        return conn;
-    }
-    
     public DBCollection getMonitorCollection() {
         return getConnection().getDB(conf.getSchema()+"_config").getCollection(conf.getConfigTable());
     }
@@ -50,6 +44,11 @@ public class MongoHandler {
         return db;
     }
 
+    private DBCollection getCollection(String schema, String table) {
+        DB db = getConnection().getDB(schema);
+        DBCollection conn = db.getCollection(table);
+        return conn;
+    }
     
     public void init() {
         logger.info("init mongo handler." + conf);
