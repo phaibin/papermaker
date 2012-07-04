@@ -15,17 +15,17 @@ class TestJJEExtract(unittest.TestCase):
         self.hotels = JJEHotels('上海')
         
     def test_extract_page(self):
-        (total, pages) = self.hotels.extractPages(self.soup)
+        (total, pages) = self.hotels._extractPages(self.soup)
         self.assertEqual((74,8), (total, pages))
 
     def test_extract_hotels(self):
-        hotels = self.hotels.extractHotels(self.soup)
+        hotels = self.hotels._extractHotels(self.soup)
         self.assertEqual(10, len(hotels))
         self.assertEqual(110, hotels[0]['id'])
         self.assertEqual('锦江之星上海新国际博览中心店', hotels[0]['name'])
 
     def test_extract_prices(self):
-        prices = self.hotels.extractPrices(self.soup)
+        prices = self.hotels._extractPrices(self.soup)
         self.assertEqual(10, len(prices))
         self.assertEqual(305, prices[0][u'标准房A'])
         self.assertEqual('110', prices[0]['id'])

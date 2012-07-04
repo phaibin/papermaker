@@ -35,9 +35,7 @@ class TestUrlGetPost(unittest.TestCase):
         req.add_data(encoded_data)
         response = urllib2.urlopen(req)
         content = response.read()
-        print type(content), dir(content)
-        #print content
-        tree = etree.XML(content)
+        tree = etree.parse(StringIO(content))
         cityNames = tree.xpath('/citiesDto/cities/name')
         self.assertEquals(125, len(cityNames))
             
@@ -55,16 +53,17 @@ class TestUrlGetPost(unittest.TestCase):
         content = response.read()
         cr = StringIO(content)
         for line in cr.readlines():
-            if line.lstrip().startswith('var Cities'):
+            if line.lstrip().startswith('var Cities '):
                 pattern = '\'(.+)\''
                 p = re.compile(pattern)
                 match = p.search(line)
-                content = match.group(1)
+                content = match._partition(1)
                 cityList = content.split('|')
-                cgl = group(cityList, 3)
-                print len(cgl), cgl
+                cgl = _partition(cityList, 3)
+                self.assertEqual(161, len(cgl))
+                break
 
-def group(lst, n):
+def _partition(lst, n):
     return zip(*[lst[i::n] for i in range(n)]) 
 
 def group2(lst, n):

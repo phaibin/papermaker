@@ -14,17 +14,17 @@ class TestInnsExtract(unittest.TestCase):
         self.hotels = InnsHotels('3100')
 
     def test_extract_page(self):
-        (total, pages) = self.hotels.extractPages(self.soup)
+        (total, pages) = self.hotels._extractPages(self.soup)
         self.assertEqual((40,8), (total,pages))
 
     def test_extract_hotels(self):
-        hotels = self.hotels.extractHotels(self.soup)
+        hotels = self.hotels._extractHotels(self.soup)
         self.assertEqual(5, len(hotels))
         self.assertEqual('北京国际展览中心店', hotels[0]['name'])
         self.assertEqual('0622', hotels[0]['id'])
 
     def test_extract_prices(self):
-        prices = self.hotels.extractPrices(self.soup)
+        prices = self.hotels._extractPrices(self.soup)
         self.assertEqual(5, len(prices))
         hotelPrice = prices[0]
         self.assertEqual(269, hotelPrice[u'商务房A'])
