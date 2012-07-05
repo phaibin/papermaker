@@ -4,6 +4,7 @@
 import unittest
 from core.fetch import INNS
 from core.fetch import JJE
+import socket
 
 class TestFetch(unittest.TestCase):
     def setUp(self):
@@ -14,12 +15,22 @@ class TestFetch(unittest.TestCase):
         unittest.TestCase.tearDown(self)
     
     def test_inns_fetch(self):
-        inns = INNS('1100')
-        print inns.fetchPage(inns.makeUrl(1))
+        inns = INNS('1100', '北京市')
+        print inns.extract()
+#        print inns._fetchPage(inns._makeUrl(1))
     
     def test_jje_fetch(self):
-        jje = JJE('北京')
-        print jje.fetchPage(jje.makeUrl(1))
+        jje = JJE('三亚', '4602')
+        print jje.extract()
+#        print jje._fetchPage(jje._makeUrl(1))
+
+origGetAddrInfo = socket.getaddrinfo
+
+def getAddrInfoWrapper(host, port, family=0, socktype=0, proto=0, flags=0):
+    return origGetAddrInfo(host, port, socket.AF_INET, socktype, proto, flags)
+
+socket.getaddrinfo = getAddrInfoWrapper
+
 
 if __name__=='__main__':
     unittest.main()

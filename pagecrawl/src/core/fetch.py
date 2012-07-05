@@ -3,8 +3,6 @@
 
 import datetime
 import urllib2
-import bs4
-from bs4 import BeautifulSoup
 import json
 from StringIO import StringIO
 import re
@@ -12,63 +10,78 @@ from lxml import etree
 import urllib
 
 class Page:
-    def __init__(self, city, checkinDate = datetime.date.today(), timedelta = datetime.timedelta(days=1)):
-        self.city = city
+    def __init__(self, cityPara, cityName, country='中国', checkinDate = datetime.date.today(), timedelta = datetime.timedelta(days=1)):
+        self.city = cityPara
+        self.cityChinese = cityName
+        self.country = country
         self.checkinDate = checkinDate
         self.checkoutDate = checkinDate + timedelta
     
     def _fetchPage(self, url):
-        soup = BeautifulSoup(urllib2.build_opener().open(url).read())
-        return (soup, self._extractHotels(soup), self._extractPrices(soup))
+        print 'fetch url:', url, datetime.datetime.now()
+        request = self._makeRequest(url)
+        tree = etree.parse(request, etree.HTMLParser())
+        return (tree, self._extractHotels(tree), self._extractPrices(tree))
 
     def extract(self):
-        (soup, hotels, prices) = self._fetchPage(self._makeUrl(1))
+        (tree, hotels, prices) = self._fetchPage(self._makeUrl(1))
         hp = [dict(x.items()+y.items()) for (x,y) in zip(hotels, prices)]
-        (totals, pages) = self._extractPages(soup)
+        (totals, pages) = self._extractPages(tree)
         for j in [i for i in range(2, pages+1) if pages>1]:
-            (soup, hotels, prices) = self._fetchPage(self._makeUrl(j))
+            (tree, hotels, prices) = self._fetchPage(self._makeUrl(j))
             hp.extend([dict(x.items()+y.items()) for (x,y) in zip(hotels, prices)])
         return hp, totals
 
 class INNS(Page):
-    def _extractPages(self, soup):
+    def _makeRequest(self, url):
+        req = urllib2.Request(url)
+        request = urllib2.urlopen(req)
+        return request
+    
+    def _extractPages(self, tree):
+        pageSys = tree.xpath('//div[@class="pageSys"]')
         try:
-            match = re.findall('\d+', soup.find('div', attrs={'class':'pageSys'}).getText())
+            match = re.findall('\d+', pageSys.pop().text)
             return (int(match[0]), int(match[2]))
-        except:
-            ts = soup.find_all('table', attrs={'class':'mlist'})
-            return (len(ts), 1)
+        except IndexError, err:
+            print 'not found page info, use mlist instead : ', err
+            try:
+                return (len(tree.xpath('//table[@class="mlist"]')), 1)
+            except:
+                return (0,1)
    
-    def _extractHotels(self, soup):
+    def _extractHotels(self, tree):
         result = []
-        for t in soup.find_all('table', attrs={'class':'mlist'}):
-            a_tag = t.tr.td.a
-            innName = a_tag.getText()
-            link = a_tag.get('href')
-            match = re.findall('\d+', link)
-            result.append({'id':match[0], 'name':innName})
+        for t in tree.xpath('//table[@class="mlist"]'):
+            innNameTag = t.xpath('tr[1]/*/a[@class="innName"]').pop()
+            hotelInfo = {'id':re.findall('\d+', innNameTag.get('href'))[0], 'name': innNameTag.text}
+            bigScoreTable = t.xpath('tr[2]/td[1]/table').pop()#涉外
+            hotelInfo['bigScore'] = bigScoreTable.xpath('td/div/p[last()]/span').pop().text
+            tbFangTag = t.xpath('tr[2]/td[2]/table[@class="tbFang"]').pop()
+            hotelInfo['address'] = list(tbFangTag.find('tr/td/p[2]').itertext())[1]
+            hotelInfo['telephone'] = list(tbFangTag.find('tr/td/p[3]').itertext())[1]
+            try:
+                introTag = tbFangTag.find('tr/td/div/div')
+                if introTag is None:
+                    introTag = tbFangTag.find('tr/td/div/p')
+                hotelInfo['intro'] = ''.join(introTag.itertext())
+            except:
+                print hotelInfo['name'], 'parse intro error.'
+            result.append(hotelInfo)
         return result
     
-    def _extractPrices(self, soup):
+    def _extractPrices(self, tree):
         result = []
-        tbxing = [x for x in soup.find_all('table', attrs={'class':'tbFang'}) ]
-        for t in tbxing:
-            t = t.findNextSibling('table', attrs={'class':'tbXing'})
-            room = {}
-            try :
-                t = t.table
-                t.tr.decompose()
-                for tr in [tr for tr in list(t.children) if isinstance(tr, bs4.element.Tag)]:
-                        td_tag = list(tr.children)
-                        room[td_tag[0].a.getText()] = int(td_tag[3].getText())
-                        if not room.get('id'):
-                            if td_tag[4].input.get('onclick'):
-                                match = re.findall('\d+', td_tag[4].input.get('onclick'))
-                                room['id'] = match[0]
+        for t in tree.xpath('//table[@class="mlist"]'):
+            try:
+                tbXing = t.xpath('tr[2]/td[2]/*/table[@class="tbXing"][last()]').pop()
+                room = {}
+                for tr in list(tbXing.iterchildren(tag='tr'))[1:]:
+                    room[tr.find('td[1]/a').text] = int(tr.find('td[4]').text)
+                result.append(room)
             except:
-                pass
-#               print 'error get'
-            result.append(room)
+                innNameTag = t.xpath('tr[1]/*/a[@class="innName"]').pop()
+                print 'no room info, ', innNameTag.text
         return result
                         
     def _extractCities(self):
@@ -85,29 +98,35 @@ class INNS(Page):
     def _makeUrl(self, page):
         return 'http://www.jinjianginns.com/resv/resv1----'+self.city+'------'+str(self.checkinDate)+'---'+str(self.checkoutDate)+'----00-----'+str(page)+'.html'
     
-
 class JJE(Page):
-    def _extractPages(self, soup):
-        find = soup.find('input', attrs={'id':'totalPage'})
-        pages = find['value']
-        find = soup.find('div', attrs={'class':'rightUpSectionTitle'})
-        total = list(find.children)[-3].getText()
-        return (int(total), int(pages))
+    def _makeRequest(self, url):
+        req = urllib2.Request(url)
+        request = urllib2.urlopen(req)
+        return request
+
+    def _extractPages(self, tree):
+        pagesTag = tree.xpath('//input[@id="totalPage"]').pop()
+        totalTag = tree.xpath('//html/body/div[@id="wrap"]/div[@class="bodyContent"]/div[@class="rightContent"]/div[@class="rightUpSection"]/div[@class="rightUpSectionTitle"]/span[5]/b').pop()
+        return (int(totalTag.text), int(pagesTag.get('value')))
     
-    def _extractHotels(self, soup):
-        r = [{'id':item['id'], 'name':item['name']} for item in json.load(StringIO(soup.find('textarea', attrs={'id':'hotelMapInfo'}).getText()))]
+    def _extractHotels(self, tree):
+        r = [{'id':item['id'], 'name':item['name']} for item in json.load(StringIO(tree.find('//textarea[@id="hotelMapInfo"]').text))]
         r.sort(key=lambda x : str(x.get('id')))
         return r
     
-    def _extractPrices(self, soup):
+    def _extractPrices(self, tree):
         prices = []
-        result = json.load(StringIO(soup.find('textarea', attrs={'id':'hotelRoomInfo'}).getText())).get('result')
+        hriTag = tree.find('//textarea[@id="hotelRoomInfo"]')
+        tagString = etree.tostring(hriTag, encoding='utf-8', method='html')
+        tagString = tagString.replace('<textarea id="hotelRoomInfo" style="display:none">', '').replace('</textarea>', '').strip()
+        result = json.load(StringIO(tagString)).get('result')
         for idkey, value in result.items():
             p = {'id':idkey }
             for item in value:
                 p[item['roomName']] = item['minAveragePrice'] 
             prices.append(p)
-        return prices.sort(key=lambda x : str(x.get('id')))
+        prices.sort(key=lambda x : str(x.get('id')))
+        return prices
     
     def _extractCities(self):
         req = urllib2.Request('http://www.jinjiang.com/hotel/queryHotelCity')

@@ -6,12 +6,12 @@ from core.fetch import INNS as InnsHotels
 
 class TestExtraCities(unittest.TestCase):
     def test_getInnsCities(self):
-        hotels = InnsHotels('3100')
+        hotels = InnsHotels('3100', '上海市')
         cities = hotels._extractCities()
         self.assertEqual(161, len(cities))
         
     def test_getJJECities(self):
-        hotels = JJEHotels('sh')
+        hotels = JJEHotels('上海', '10')
         cities = hotels._extractCities()
         self.assertEqual(125, len(cities))
         

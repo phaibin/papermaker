@@ -57,7 +57,7 @@ class TestUrlGetPost(unittest.TestCase):
                 pattern = '\'(.+)\''
                 p = re.compile(pattern)
                 match = p.search(line)
-                content = match._partition(1)
+                content = match.group(1)
                 cityList = content.split('|')
                 cgl = _partition(cityList, 3)
                 self.assertEqual(161, len(cgl))
