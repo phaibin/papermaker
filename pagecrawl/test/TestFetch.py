@@ -15,12 +15,12 @@ class TestFetch(unittest.TestCase):
         unittest.TestCase.tearDown(self)
     
     def test_inns_fetch(self):
-        inns = INNS('1100', '北京市')
+        inns = INNS('1100')
         print inns.extract()
 #        print inns._fetchPage(inns._makeUrl(1))
     
     def test_jje_fetch(self):
-        jje = JJE('三亚', '4602')
+        jje = JJE('三亚')
         print jje.extract()
 #        print jje._fetchPage(jje._makeUrl(1))
 

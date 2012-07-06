@@ -10,10 +10,8 @@ from lxml import etree
 import urllib
 
 class Page:
-    def __init__(self, cityPara, cityName, country='中国', checkinDate = datetime.date.today(), timedelta = datetime.timedelta(days=1)):
+    def __init__(self, cityPara, checkinDate = datetime.date.today(), timedelta = datetime.timedelta(days=1)):
         self.city = cityPara
-        self.cityChinese = cityName
-        self.country = country
         self.checkinDate = checkinDate
         self.checkoutDate = checkinDate + timedelta
     

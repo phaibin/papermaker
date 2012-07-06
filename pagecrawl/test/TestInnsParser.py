@@ -9,7 +9,7 @@ class TestInnsExtract(unittest.TestCase):
         unittest.TestCase.setUp(self)
         with open('inns.html', 'r') as f:
             self.tree = etree.parse(f, etree.HTMLParser())
-        self.hotels = InnsHotels('3100', '北京市')
+        self.hotels = InnsHotels('3100')
         self.soup = None
 
     def test_extract_page(self):

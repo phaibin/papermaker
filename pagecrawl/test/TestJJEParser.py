@@ -10,7 +10,7 @@ class TestJJEExtract(unittest.TestCase):
         unittest.TestCase.setUp(self)
         with open('jje.html', 'r') as f:
             self.tree = etree.parse(f, etree.HTMLParser())
-        self.hotels = JJEHotels('上海', '10')
+        self.hotels = JJEHotels('上海')
         self.soup = None
         
     def test_extract_page(self):
