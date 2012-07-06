@@ -76,7 +76,7 @@ class INNS(Page):
                 hotelInfo['intro'] = ''.join(introTag.itertext())
             except:
                 print hotelInfo['name'], 'parse intro error.'
-            print hotelInfo['address'],hotelInfo['telephone'] 
+#            print hotelInfo['address'],hotelInfo['telephone'] 
             result.append(hotelInfo)
         return result
     
