@@ -6,29 +6,29 @@ from core.fetch import INNS as InnsHotels
 def compareCities(innsCities, jjeCities):
     '''Compare cities in inns&jje
     return format. 
-    {'inns':inns cities, 'jje':jje cities, 'innsDiff': city only in inns, 'jjediff': city only in jje, 'innsTotal':total in inns, 'jjeTotal':total in jje}, {...} 
+    {'inns':inns cities, 'jje':jje cities, 'intersection':intersection cities, 'innsOnly': city only in inns, 'jjeOnly': city only in jje, 'innsTotal':total in inns, 'jjeTotal':total in jje}, {...} 
     '''
     innscitySet = set([city[1].rstrip('市') for city in innsCities])
     jjeCitySet = set(jjeCities)
     innsDiffjje = innscitySet.difference(jjeCitySet)
     jjeDiffinns = jjeCitySet.difference(innscitySet)
-    return {'inns':innscitySet, 'jje':jjeCitySet, 'innsDiff':innsDiffjje, 'jjeDiff':jjeDiffinns, 'innsTotal':len(innsCities), 'jjeTotal':len(jjeCities)}
+    return {'inns':list(innscitySet), 'jje':list(jjeCitySet),'intersection':list(innscitySet.intersection(jjeCitySet)), 'innsOnly':list(innsDiffjje), 'jjeOnly':list(jjeDiffinns), 'innsTotal':len(innsCities), 'jjeTotal':len(jjeCities)}
 
 def compareHotels(innsHotels, jjeHotels):
     '''Compare hotels in each city
     return format
-    {'inns':inns hotels, 'jje':jje hotels, 'innsDiff': hotels only in inns, 'jjediff': hotels only in jje, 'innsTotal':total in inns, 'jjeTotal':total in jje}
+    {'inns':inns hotels, 'jje':jje hotels, 'innsOnly': hotels only in inns, 'jjeOnly': hotels only in jje, 'innsTotal':total in inns, 'jjeTotal':total in jje}
     '''
     innsHotelSet = set([h['name'] for h in innsHotels])
     jjeHotelSet = set(h['name'].lstrip('锦江之星') for h in jjeHotels)
     innsDiffjje = innsHotelSet.difference(jjeHotelSet)
     jjeDiffinns = jjeHotelSet.difference(innsHotelSet)
-    return {'inns':innsHotelSet, 'jje':jjeHotelSet, 'innsDiff':innsDiffjje, 'jjeDiff':jjeDiffinns, 'innsTotal':len(innsHotels), 'jjeTotal':len(jjeHotels)}
+    return {'inns':list(innsHotelSet), 'jje':list(jjeHotelSet), 'innsOnly':list(innsDiffjje), 'jjeOnly':list(jjeDiffinns), 'innsTotal':len(innsHotels), 'jjeTotal':len(jjeHotels)}
 
 def comparePrices(innsHotels, jjeHotels):
     '''Compare room type& price for every hotel in one city
     return format. 
-    [{'name':hotelName, 'innsDiff':inns only room type, 'jjeDiff':jje only room type, 'priceDiff':price different room type}, {...}] for every city
+    [{'name':hotelName, 'innsOnly':inns only room type, 'jjeOnly':jje only room type, 'priceDiff':price different room type}, {...}] for every city
     '''
     innsHotelSet = set([h['name'] for h in innsHotels])
     jjeHotelSet = set(h['name'].lstrip('锦江之星') for h in jjeHotels)
@@ -38,7 +38,7 @@ def comparePrices(innsHotels, jjeHotels):
         innsHotel = [x for x in innsHotels if x['name'] == d['name']].pop()
         jjeHotel = [x for x in jjeHotels if x['name'].lstrip('锦江之星') == d['name']].pop()
         (priceDiff, innsDiff, jjeDiff) = _compareHotelPrice(innsHotel, jjeHotel)
-        result.append({'name': d['name'], 'priceDiff':priceDiff, 'innsDiff':innsDiff, 'jjeDiff':jjeDiff})
+        result.append({'name': d['name'], 'priceDiff':list(priceDiff), 'innsOnly':list(innsDiff), 'jjeOnly':list(jjeDiff)})
     return result
 
 def _compareHotelPrice(innsHotel, jjeHotel):

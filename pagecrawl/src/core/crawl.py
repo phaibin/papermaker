@@ -18,25 +18,42 @@ def save(content, fileName, *pathSep):
         json.dump(content, f)
 
 
-def fetchCityPages(citys, root):
-    for city, cityName in citys.items():
+def fetchCityPages(citys, root, ignoreCompare=False, ignoreJJE=False):
+    for city, cityName in citys:
         try:
+            print cityName
+            
             inns, innsTotals = InnsHotels(city).extract()
-#            save(inns, city+'.txt', root,today.strftime('%Y%m%d'),'inns' )
+            save(inns, city+'.json', root,today.strftime('%Y%m%d'),'inns' )
+            print 'innstotal:', innsTotals
             
-            jje, jjeTotals = JJEHotels(cityName).extract()
-#            save(jje, city+'.txt', root,today.strftime('%Y%m%d'),'jje' )
+            if not ignoreJJE:
+                jje, jjeTotals = JJEHotels(cityName).extract()
+                save(jje, city+'.json', root,today.strftime('%Y%m%d'),'jje' )
+                print 'jjetotal:', jjeTotals
             
-            print cityName,innsTotals, jjeTotals
-            
-            diffHotel = compare.compareHotels(inns, jje)
-            deffPrice = compare.comparePrices(inns, jje)
-
-        except:
-            print 'error in', city, cityName
+            if not ignoreCompare:
+                diffHotel = compare.compareHotels(inns, jje)
+                deffPrice = compare.comparePrices(inns, jje)
+                save(diffHotel, 'diffHotel.json', root,today.strftime('%Y%m%d'),'diff' )
+                save(deffPrice, city+'.json', root,today.strftime('%Y%m%d'),'diff','prices' )
+        except Exception, err:
+            print 'error in', city, cityName, err
     
 #fetchCityPages({'1200':'天津'},'d:/pagedata')
 #fetchCityPages(cityDicts, 'd:')
 
 #cityDicts = {'1100':'北京', '1200':'天津', '3100':'上海', '4201':'武汉', '5000':'重庆', '6101':'西安', '4101':'郑州', '3201':'南京', '3202':'无锡', '4401':'广州', '5301':'昆明', '4403':'深圳', '4602':'三亚', '3205':'苏州', '3301':'杭州', '4301':'长沙'}
 #fetchCityPages(cityDicts, '/home/xuhaixiang/var/pagedata')
+root = '/home/xuhaixiang/var/pagedata'
+innsCities = InnsHotels('').fetchCities()
+jjeCities = JJEHotels('').fetchCities()
+a = compare.compareCities(innsCities, jjeCities)
+save(a, 'cities.json', root,today.strftime('%Y%m%d'))
+
+cities = [(cityInfo[2], cityInfo[1].rstrip('市')) for cityInfo in innsCities]
+citiesInterSection = [city for city in cities if city[1] in a['intersection']]
+fetchCityPages(citiesInterSection, root)
+
+citiesInnsOnly = [city for city in cities if city[1] in a['innsOnly']]
+fetchCityPages(citiesInnsOnly, root, ignoreCompare=True, ignoreJJE=True)

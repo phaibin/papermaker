@@ -29,6 +29,9 @@ class Page:
             (tree, hotels, prices) = self._fetchPage(self._makeUrl(j))
             hp.extend([dict(x.items()+y.items()) for (x,y) in zip(hotels, prices)])
         return hp, totals
+    
+    def fetchCities(self):
+        return self._extractCities()
 
 class INNS(Page):
     def _makeRequest(self, url):
@@ -85,6 +88,9 @@ class INNS(Page):
         return result
                         
     def _extractCities(self):
+        '''return format
+        [(beijing, 北京, 1100),(...)]
+        '''
         req = urllib2.Request('http://www.jinjianginns.com/js/jjcity.js')
         content = urllib2.urlopen(req).read()
         cr = StringIO(content)
