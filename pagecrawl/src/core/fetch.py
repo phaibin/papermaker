@@ -73,9 +73,11 @@ class INNS(Page):
         for t in tree.xpath('//table[@class="mlist"]'):
             try:
                 tbXing = t.xpath('tr[2]/td[2]/*/table[@class="tbXing"][last()]').pop()
-                room = {}
+                room = {'rooms':[]}
                 for tr in list(tbXing.iterchildren(tag='tr'))[1:]:
-                    room[tr.find('td[1]/a').text] = int(tr.find('td[4]').text)
+                    roomName = tr.find('td[1]/a').text 
+                    room['rooms'].append(roomName)
+                    room[roomName] = int(tr.find('td[4]').text)
                 result.append(room)
             except:
                 innNameTag = t.xpath('tr[1]/*/a[@class="innName"]').pop()
@@ -88,7 +90,7 @@ class INNS(Page):
         cr = StringIO(content)
         for line in cr.readlines():
             if line.lstrip().startswith('var Cities '):
-                return self._getCities(line)
+                return self._getCities(unicode(line))
             
     def _getCities(self, line):
         return _partition(_str2List(_findMatchInLine(line, '\'(.+)\''),'|'), 3)
@@ -119,8 +121,9 @@ class JJE(Page):
         tagString = tagString.replace('<textarea id="hotelRoomInfo" style="display:none">', '').replace('</textarea>', '').strip()
         result = json.load(StringIO(tagString)).get('result')
         for idkey, value in result.items():
-            p = {'id':idkey }
+            p = {'id':idkey, 'rooms':[] }
             for item in value:
+                p['rooms'].append(item['roomName'])
                 p[item['roomName']] = item['minAveragePrice'] 
             prices.append(p)
         prices.sort(key=lambda x : str(x.get('id')))
