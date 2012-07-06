@@ -10,7 +10,7 @@ import datetime
 
 today = datetime.date.today()
 
-def save(content, fileName, *pathSep):
+def _save(content, fileName, *pathSep):
     path = os.sep.join(pathSep)
     if not os.path.isdir(path):
         os.makedirs(path)
@@ -18,42 +18,43 @@ def save(content, fileName, *pathSep):
         json.dump(content, f)
 
 
-def fetchCityPages(citys, root, ignoreCompare=False, ignoreJJE=False):
+def _fetchCityPages(citys, root, ignoreCompare=False, ignoreJJE=False):
     for city, cityName in citys:
         try:
             print cityName
             
             inns, innsTotals = InnsHotels(city).extract()
-            save(inns, city+'.json', root,today.strftime('%Y%m%d'),'inns' )
+            _save(inns, city+'.json', root,today.strftime('%Y%m%d'),'inns' )
             print 'innstotal:', innsTotals
             
             if not ignoreJJE:
                 jje, jjeTotals = JJEHotels(cityName).extract()
-                save(jje, city+'.json', root,today.strftime('%Y%m%d'),'jje' )
+                _save(jje, city+'.json', root,today.strftime('%Y%m%d'),'jje' )
                 print 'jjetotal:', jjeTotals
             
             if not ignoreCompare:
                 diffHotel = compare.compareHotels(inns, jje)
                 deffPrice = compare.comparePrices(inns, jje)
-                save(diffHotel, 'diffHotel.json', root,today.strftime('%Y%m%d'),'diff' )
-                save(deffPrice, city+'.json', root,today.strftime('%Y%m%d'),'diff','prices' )
+                _save(diffHotel, 'diffHotel.json', root,today.strftime('%Y%m%d'),'diff' )
+                _save(deffPrice, city+'.json', root,today.strftime('%Y%m%d'),'diff','prices' )
         except Exception, err:
             print 'error in', city, cityName, err
     
-#fetchCityPages({'1200':'天津'},'d:/pagedata')
-#fetchCityPages(cityDicts, 'd:')
+def do():
+    root = '/home/xuhaixiang/var/pagedata'
+    innsCities = InnsHotels('').fetchCities()
+    jjeCities = JJEHotels('').fetchCities()
+    a = compare.compareCities(innsCities, jjeCities)
+    _save(a, 'cities.json', root,today.strftime('%Y%m%d'))
+    
+    cities = [(cityInfo[2], cityInfo[1].rstrip('市')) for cityInfo in innsCities]
+    citiesInterSection = [city for city in cities if city[1] in a['intersection']]
+    _fetchCityPages(citiesInterSection, root)
+    
+    citiesInnsOnly = [city for city in cities if city[1] in a['innsOnly']]
+    _fetchCityPages(citiesInnsOnly, root, ignoreCompare=True, ignoreJJE=True)
 
 #cityDicts = {'1100':'北京', '1200':'天津', '3100':'上海', '4201':'武汉', '5000':'重庆', '6101':'西安', '4101':'郑州', '3201':'南京', '3202':'无锡', '4401':'广州', '5301':'昆明', '4403':'深圳', '4602':'三亚', '3205':'苏州', '3301':'杭州', '4301':'长沙'}
-#fetchCityPages(cityDicts, '/home/xuhaixiang/var/pagedata')
-root = '/home/xuhaixiang/var/pagedata'
-innsCities = InnsHotels('').fetchCities()
-jjeCities = JJEHotels('').fetchCities()
-a = compare.compareCities(innsCities, jjeCities)
-save(a, 'cities.json', root,today.strftime('%Y%m%d'))
+#cityDicts = [('3205','苏州')]
+#_fetchCityPages(cityDicts, '/home/xuhaixiang/var/pagedata')
 
-cities = [(cityInfo[2], cityInfo[1].rstrip('市')) for cityInfo in innsCities]
-citiesInterSection = [city for city in cities if city[1] in a['intersection']]
-fetchCityPages(citiesInterSection, root)
-
-citiesInnsOnly = [city for city in cities if city[1] in a['innsOnly']]
-fetchCityPages(citiesInnsOnly, root, ignoreCompare=True, ignoreJJE=True)

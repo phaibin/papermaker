@@ -59,8 +59,16 @@ class INNS(Page):
             bigScoreTable = t.xpath('tr[2]/td[1]/table').pop()#涉外
             hotelInfo['bigScore'] = bigScoreTable.xpath('td/div/p[last()]/span').pop().text
             tbFangTag = t.xpath('tr[2]/td[2]/table[@class="tbFang"]').pop()
-            hotelInfo['address'] = list(tbFangTag.find('tr/td/p[2]').itertext())[1]
-            hotelInfo['telephone'] = list(tbFangTag.find('tr/td/p[3]').itertext())[1]
+            try:
+                hotelInfo['address'] = list(tbFangTag.find('tr/td/p[2]').itertext())[1]
+                hotelInfo['telephone'] = list(tbFangTag.find('tr/td/p[3]').itertext())[1]
+            except:
+                print hotelInfo['name'], 'parse address error, because its no low price'
+                try:
+                    hotelInfo['address'] = list(tbFangTag.find('tr/td/p[1]').itertext())[1]
+                    hotelInfo['telephone'] = list(tbFangTag.find('tr/td/p[2]').itertext())[1]
+                except:
+                    print hotelInfo['name'], 'parse address error'
             try:
                 introTag = tbFangTag.find('tr/td/div/div')
                 if introTag is None:
@@ -68,6 +76,7 @@ class INNS(Page):
                 hotelInfo['intro'] = ''.join(introTag.itertext())
             except:
                 print hotelInfo['name'], 'parse intro error.'
+            print hotelInfo['address'],hotelInfo['telephone'] 
             result.append(hotelInfo)
         return result
     
