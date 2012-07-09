@@ -1,7 +1,0 @@
-.menu li {
-	float : left;
-	list-style:none;
-	margin-right:10px;
-}
-.menu{ display:block; float:left;line-height:20px; margin-bottom:10px; width:980px; padding-left:0;}
-.wrap,.content{ width:980px; margin:25px auto;}

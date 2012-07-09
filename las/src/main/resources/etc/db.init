@@ -1,1 +1,0 @@
-db.jje_log_data.ensureIndex({"logTime" : -1, "priority" : 1, "module": 1})
