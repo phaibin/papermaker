@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#! /usr/bin/env python
 # -*- coding:utf-8 -*-
 from core.fetch import JJE as JJEHotels
 from core.fetch import INNS as InnsHotels
