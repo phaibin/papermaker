@@ -10,6 +10,9 @@ import datetime
 
 today = datetime.date.today()
 
+def save(content, fileName, *pathSep):
+    _save(content, fileName, *pathSep)
+
 def _save(content, fileName, *pathSep):
     path = os.sep.join(pathSep)
     if not os.path.isdir(path):

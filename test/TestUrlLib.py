@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
 import unittest
@@ -37,7 +37,7 @@ class TestUrlGetPost(unittest.TestCase):
         content = response.read()
         tree = etree.parse(StringIO(content))
         cityNames = tree.xpath('/citiesDto/cities/name')
-        self.assertEquals(125, len(cityNames))
+        self.assertEquals(118, len(cityNames))
             
     def makeRequest(self, url):
 #        httpHandler = urllib2.HTTPHandler(debuglevel=1)
