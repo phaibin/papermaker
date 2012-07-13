@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python2.7
 # -*- coding:utf-8 -*-
 
 import datetime
@@ -17,7 +17,7 @@ class Page:
     
     def _fetchPage(self, url):
         print 'fetch url:', url, datetime.datetime.now()
-        request = self._makeRequest(url)
+        request = _request(url, readContent=False)
         tree = etree.parse(request, etree.HTMLParser())
         return (tree, self._extractHotels(tree), self._extractPrices(tree))
 
@@ -34,11 +34,6 @@ class Page:
         return self._extractCities()
 
 class INNS(Page):
-    def _makeRequest(self, url):
-        req = urllib2.Request(url)
-        request = urllib2.urlopen(req)
-        return request
-    
     def _extractPages(self, tree):
         pageSys = tree.xpath('//div[@class="pageSys"]')
         try:
@@ -87,7 +82,7 @@ class INNS(Page):
                 tbXing = t.xpath('tr[2]/td[2]/*/table[@class="tbXing"][last()]').pop()
                 room = {'rooms':[]}
                 for tr in list(tbXing.iterchildren(tag='tr'))[1:]:
-                    roomName = tr.find('td[1]/a').text 
+                    roomName = tr.find('td[1]/a').text.strip() 
                     room['rooms'].append(roomName)
                     room[roomName] = int(tr.find('td[4]').text)
                 result.append(room)
@@ -100,9 +95,7 @@ class INNS(Page):
         '''return format
         [(beijing, 北京, 1100),(...)]
         '''
-        req = urllib2.Request('http://www.jinjianginns.com/js/jjcity.js')
-        content = urllib2.urlopen(req).read()
-        cr = StringIO(content)
+        cr = StringIO(_request('http://www.jinjianginns.com/js/jjcity.js'))
         for line in cr.readlines():
             if line.lstrip().startswith('var Cities '):
                 return self._getCities(unicode(line))
@@ -114,11 +107,6 @@ class INNS(Page):
         return 'http://www.jinjianginns.com/resv/resv1----'+self.city+'------'+str(self.checkinDate)+'---'+str(self.checkoutDate)+'----00-----'+str(page)+'.html'
     
 class JJE(Page):
-    def _makeRequest(self, url):
-        req = urllib2.Request(url)
-        request = urllib2.urlopen(req)
-        return request
-
     def _extractPages(self, tree):
         pagesTag = tree.xpath('//input[@id="totalPage"]').pop()
         totalTag = tree.xpath('//html/body/div[@id="wrap"]/div[@class="bodyContent"]/div[@class="rightContent"]/div[@class="rightUpSection"]/div[@class="rightUpSectionTitle"]/span[5]/b').pop()
@@ -145,16 +133,21 @@ class JJE(Page):
         return prices
     
     def _extractCities(self):
-        req = urllib2.Request('http://www.jinjiang.com/hotel/queryHotelCity')
-        req.add_data(urllib.urlencode({'cityName':''}))
-        content = urllib2.urlopen(req).read()
-        tree = etree.parse(StringIO(content))
+        tree = etree.parse(StringIO(_request('http://www.jinjiang.com/hotel/queryHotelCity', {'cityName':''})))
         cityNames = tree.xpath('/citiesDto/cities/name')
         return [cn.text for cn in cityNames]        
 
     def _makeUrl(self, page):
         return 'http://www.jinjiang.com/hotel/query?hotelTypes=&brands=JJINN%2CBESTAY&checkinDate='+str(self.checkinDate)+'&checkoutDate='+str(self.checkoutDate)+'&cityName='+self.city+'&queryWords=&roomCount=1&pagination.page='+str(page)
 
+def _request(url, data=None, readContent=True):
+    req = urllib2.Request(url)
+    if data is not None:
+        req.add_data(urllib.urlencode(data))
+    if readContent:
+        return urllib2.urlopen(req).read()
+    return urllib2.urlopen(req)
+        
 def _findMatchInLine(line, pattern):
     return re.search(pattern, line).group(1)
 
@@ -163,9 +156,3 @@ def _str2List(line, sep):
 
 def _partition(lst, n):
     return zip(*[lst[i::n] for i in range(n)]) 
-
-def partition2(lst, n):
-    for i in range(0, len(lst), n):
-        val = lst[i:i+n]
-        if len(val) == n:
-            yield tuple(val)

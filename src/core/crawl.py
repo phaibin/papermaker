@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python2.7
 # -*- coding:utf-8 -*-
 
 import os
@@ -35,13 +35,13 @@ def _fetchCityPages(citys, root, ignoreCompare=False, ignoreJJE=False):
             if not ignoreCompare:
                 diffHotel = compare.compareHotels(inns, jje)
                 deffPrice = compare.comparePrices(inns, jje)
-                _save(diffHotel, 'diffHotel.json', root,today.strftime('%Y%m%d'),'diff' )
-                _save(deffPrice, city+'.json', root,today.strftime('%Y%m%d'),'diff','prices' )
+                _save(diffHotel, city+'.json', root,today.strftime('%Y%m%d'), 'hotel' )
+                _save(deffPrice, city+'.json', root,today.strftime('%Y%m%d'), 'prices' )
         except Exception, err:
             print 'error in', city, cityName, err
     
-def do():
-    root = '/home/xuhaixiang/var/pagedata'
+def do(root = '/home/xuhaixiang/var/pagedata'):
+    print 'do fetch....'
     innsCities = InnsHotels('').fetchCities()
     jjeCities = JJEHotels('').fetchCities()
     a = compare.compareCities(innsCities, jjeCities)

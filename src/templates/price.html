@@ -1,0 +1,21 @@
+$def with(cities, prices)
+$:render.header()
+
+        <div class="box">
+
+            <div class="box todos">
+            	$for city in prices:
+	            	<div>$city['city'] </div>
+	            	$for data in city['data']:
+	            		<div>&nbsp;&nbsp;&nbsp;&nbsp;$data['name']</div>
+		            	$ innsOnlyStr = ','.join(data['innsOnly'])
+		            	$ jjeOnlyStr = ','.join(data['jjeOnly'])
+		                <ul>
+		                	<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;innsonly : $innsOnlyStr</li>
+		                	<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jjeonly : $jjeOnlyStr</li>
+		                </ul>
+            </div>
+
+        </div>
+
+$:render.foot()

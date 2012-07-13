@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python2.7
 # -*- coding:utf-8 -*-
 
 import unittest
@@ -37,7 +37,7 @@ class TestUrlGetPost(unittest.TestCase):
         content = response.read()
         tree = etree.parse(StringIO(content))
         cityNames = tree.xpath('/citiesDto/cities/name')
-        self.assertEquals(118, len(cityNames))
+        self.assertEquals(125, len(cityNames))
             
     def makeRequest(self, url):
 #        httpHandler = urllib2.HTTPHandler(debuglevel=1)
@@ -54,7 +54,7 @@ class TestUrlGetPost(unittest.TestCase):
         cr = StringIO(content)
         for line in cr.readlines():
             if line.lstrip().startswith('var Cities '):
-                pattern = r"'(.+)'"
+                pattern = '\'(.+)\''
                 p = re.compile(pattern)
                 match = p.search(line)
                 content = match.group(1)

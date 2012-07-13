@@ -1,0 +1,18 @@
+$def with(cities)
+$:render.header()
+
+        <div class="box">
+
+            <div class="box todos">
+            	<div>inns total city: $cities['innsTotal'], jje total city : $cities['jjeTotal']</div>
+            	$ innsOnlyStr = ','.join(cities['innsOnly'])
+            	$ jjeOnlyStr = ','.join(cities['jjeOnly'])
+                <ul>
+                	<li>inns only : $innsOnlyStr</li>
+                	<li>jje only : $jjeOnlyStr</li>
+                </ul>
+            </div>
+
+        </div>
+
+$:render.foot()

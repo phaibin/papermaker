@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/python
 # -*- coding:utf-8 -*-
 import unittest
 from core.fetch import JJE as JJEHotels

@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/python
 # -*- coding:utf-8 -*-
 
 pre_fix = 'controllers.'
@@ -6,6 +6,13 @@ pre_fix = 'controllers.'
 urls = (
     '/',                    pre_fix + 'site.Index',
     '/start',                    pre_fix + 'site.Start',
-    '/date/(\d+)',          pre_fix + 'site.DiffView',
-    '/diff/(\d+)',     pre_fix + 'site.DiffDetailView'
+    '/hotel/(\d+)',          pre_fix + 'site.Hotel',
+    '/hotel/inns/(\d+)',          pre_fix + 'site.InnsHotelOnly',
+    '/hotel/jje/(\d+)',          pre_fix + 'site.JJEHotelOnly',
+    '/city/(\d+)',     pre_fix + 'site.City',
+    '/city/inns/(\d+)',     pre_fix + 'site.InnsCityOnly',
+    '/city/jje/(\d+)',     pre_fix + 'site.JJECityOnly',
+    '/price/(\d+)',     pre_fix + 'site.Price',
+    '/price/inns/(\d+)',     pre_fix + 'site.InnsPriceOnly',
+    '/price/jje/(\d+)',     pre_fix + 'site.JJEPriceOnly',
 )
