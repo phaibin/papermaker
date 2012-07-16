@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
 import web
@@ -14,7 +14,7 @@ config = web.storage(
     static = '/static'
 )
 
-data_root = '/home/xuhaixiang/var/pagedata'
+data_root = '/Users/leon/Desktop/Python/papermaker/pagedata'
 
 web.template.Template.globals['config'] = config
 web.template.Template.globals['render'] = render
